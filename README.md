@@ -8,6 +8,28 @@
 ## Introduction
 
 ## Requirement
+* [Python 2.7](https://www.python.org/)
+* [pandas](http://pandas.pydata.org/)
+* [SciPy](http://www.scipy.org/)
+* [StatsModels](http://statsmodels.sourceforge.net/)
+
+## Installation:
+
+- **Install Python 2.7**     
+Python may already installed on your system. Else, you can follow this [guild](https://wiki.python.org/moin/BeginnersGuide/Download) to install it.
+
+- **Install Python modules**   
+
+```
+sudo pip install pandas
+sudo pip install git+http://github.com/scipy/scipy/
+sudo pip install statsmodels
+```
+
+**Note:** There are several free scientific python distributions such as [Anaconda](http://continuum.io/downloads) and [Enthought Canopy](https://www.enthought.com/products/canopy/) which are already integrated the core scientific analytic and scientific Python packages such as `SciPy`, `pandas` and `StatsModels`.
+
+- **Download HLAassoc**   
+HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.1.tar.gz).
 
 ## Usage
 
