@@ -1,5 +1,10 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
+## News
+
+* v1.0 (23 Jan 2015): initial release. 
+* v1.1 (16 Feb 2015): linear and logistic regression were added
+
 ## Introduction
 
 ## Requirement
@@ -24,3 +29,6 @@ No header row should be given. For example, here are two individuals typed for 6
 **Note:** Individual `0002` does not have genotype for HLA-DQA1 (two `NA`). All alleles have six digits resolution except that one allele of HLA-C of individual `0002` only has four digits resolution. It is fine if we only want to test association at two or four digits resolution.  
 
 ## Output
+
+
+
