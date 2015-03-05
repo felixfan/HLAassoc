@@ -8,6 +8,7 @@
 ## Introduction
 
 ## Requirement
+
 * [Python 2.7](https://www.python.org/)
 * [pandas](http://pandas.pydata.org/)
 * [SciPy](http://www.scipy.org/)
@@ -15,7 +16,8 @@
 
 ## Installation:
 
-- **Install Python 2.7**     
+- **Install Python 2.7**   
+
 Python may already installed on your system. Else, you can follow this [guild](https://wiki.python.org/moin/BeginnersGuide/Download) to install it.
 
 - **Install Python modules**   
@@ -29,6 +31,7 @@ sudo pip install statsmodels
 **Note:** There are several free scientific python distributions such as [Anaconda](http://continuum.io/downloads) and [Enthought Canopy](https://www.enthought.com/products/canopy/) which are already integrated the core scientific analytic and scientific Python packages such as `SciPy`, `pandas` and `StatsModels`.
 
 - **Download HLAassoc**   
+
 HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.1.tar.gz).
 
 ## Optionals and Usage
@@ -88,6 +91,27 @@ Test of association using two digits or four digits. When two was used, alleles 
 
 ### 3) Genetic model to test (-m or --model)   
 
+When Pearson chi-squared test or Fisher's exact test was used, three genetic models can be specified.   
+
+```
+allelic    compares one allele against the others group together
+dom        compares individuals carry one allele against individuals do not carry it
+rec        compares individuals carry homozygous of one allele against other individuals
+```
+
+Default value is *allelic*.
+
+### 4) Methods for association test (-t or --test)
+
+```
+chisq       Pearson chi-squared test (For disease traits)
+fisher      Fisher's exact test (For disease traits)
+logistic    logistic regression (For disease traits)
+linear      linear regression (For quantitative traits)
+```
+When linear or logistic regression was used, assume `A*01:01` is the test allele, then `A*01:01 A*01:01` is code as 2, `A*01:01 A*01:02` is code as 1, and `A*01:02 A*01:03` is code as 0.
+
+Default value is *chisq*.
 
 ## Output
 
