@@ -84,7 +84,7 @@ No header row should be given. For example, here are two individuals typed for 6
 
 ### 2) Digits resolution (-d or --digits)   
 
-Test of association using two digits or four digits genotype. Default value is 4.
+Test of association using two digits or four digits. When two was used, alleles such as `A*02:01` and `A*02:06` will be combined as `A*02`. Default value is 4.
 
 ### 3) Genetic model to test (-m or --model)   
 
