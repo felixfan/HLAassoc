@@ -18,7 +18,7 @@
 
 - **Install Python 2.7**   
 
-Python may already installed on your system. Else, you can follow this [guild](https://wiki.python.org/moin/BeginnersGuide/Download) to install it.
+If you don't already have Python installed. You can follow this [guild](https://wiki.python.org/moin/BeginnersGuide/Download) to install it.
 
 - **Install Python modules**   
 
