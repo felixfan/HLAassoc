@@ -34,7 +34,7 @@ sudo pip install statsmodels
 
 The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.1.tar.gz).
 
-## Optionals and Usage
+## Optionals
 
 ```
 python HLAassoc.py -h
@@ -132,6 +132,25 @@ IID  age sex bmi
 **Note:** Name of trait should not include any white-space.
 
 **Note:** `--covar` only effect when `--test linear` or `--test logistic` is specified.
+
+**Note:** The order of individuals in covariates file does not have to be the same as the genotype input file. The number of individuals in covariates file also does not have to be the same as the genotype input file. Only the common individuals of both files were included in the analysis.
+
+### 6) Covariates name (-n or --covarname)
+
+To select a particular subset of covariates, use `--covarname covarnames` command.
+
+*covarnames* is a string of trait names (in the header row of covariates file) concatenate with comma(,).
+
+For example,
+
+```
+--covar cov.txt
+--covar cov.txt --covarname bmi
+--covar cov.txt --covarname age,bmi
+--covar cov.txt --covarname age,sex,bmi
+```
+
+## Usage
 
 ## Output
 
