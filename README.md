@@ -14,7 +14,7 @@
 * [SciPy](http://www.scipy.org/)
 * [StatsModels](http://statsmodels.sourceforge.net/)
 
-## Installation:
+## Installation
 
 - **Install Python 2.7**   
 
