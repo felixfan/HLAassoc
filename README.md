@@ -101,6 +101,8 @@ rec        compares individuals carry homozygous of one allele against other ind
 
 Default value is *allelic*.
 
+**Note:** `--model` only effect when `--test chisq` or `--test fisher` is specified.
+
 ### 4) Methods for association test (-t or --test)
 
 ```
@@ -112,6 +114,24 @@ linear      linear regression (For quantitative traits)
 When linear or logistic regression was used, assume `A*01:01` is the test allele, then `A*01:01 A*01:01` is code as 2, `A*01:01 A*01:02` is code as 1, and `A*01:02 A*01:03` is code as 0.
 
 Default value is *chisq*.
+
+### 5) Covariates file (-c or --covar)
+
+One or more covariates can be included in linear and logistic regression.
+
+The covariates file is a white-space (space or tab) delimited file. The first row is header. Row 2 onwards contain the individual ID (IID) and measures of several traits. Each row for one individual. The first column is IID and column 2 onwards contain measures of several traits. Each column for one trait.
+
+For example, here are two individuals with three traits:
+
+```
+IID  age sex bmi
+0001 28  1   20.70
+0002 23  0   16.29
+```
+
+**Note:** Name of trait should not include any white-space.
+
+**Note:** `--covar` only effect when `--test linear` or `--test logistic` is specified.
 
 ## Output
 
