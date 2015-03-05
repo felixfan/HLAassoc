@@ -31,9 +31,41 @@ sudo pip install statsmodels
 - **Download HLAassoc**   
 HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.1.tar.gz).
 
-## Usage
+## Optionals and Usage
 
-## Input
+```
+python HLAassoc.py -h
+usage: HLAassoc.py [-h] [-v] -i FILE [-d {2,4}] [-m {allelic,dom,rec}]
+                   [-t {chisq,fisher,logistic,linear}] [-c COVAR]
+                   [-n COVARNAME] [-f FREQ] [-a {FDR,Bonferroni,Holm}]
+                   [-o OUT] [-V {False,True}] [-p PERM]
+
+HLA Association Analysis
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -i FILE, --file FILE  input file
+  -d {2,4}, --digits {2,4}
+                        digits to test, default 4
+  -m {allelic,dom,rec}, --model {allelic,dom,rec}
+                        genetic model, default allelic
+  -t {chisq,fisher,logistic,linear}, --test {chisq,fisher,logistic,linear}
+                        statistical test method, default chisq
+  -c COVAR, --covar COVAR
+                        covariants file
+  -n COVARNAME, --covarname COVARNAME
+                        select a particular subset of covariates
+  -f FREQ, --freq FREQ  minimal frequency, default 0.05
+  -a {FDR,Bonferroni,Holm}, --adjust {FDR,Bonferroni,Holm}
+                        p value correction, default FDR
+  -o OUT, --out OUT     output file
+  -V {False,True}, --print {False,True}
+                        print output to screen
+  -p PERM, --perm PERM  number of permutation
+```
+
+### 1) Genotype Input (-i or --file)  
 
 The input file is a white-space (space or tab) delimited file. The first two columns are mandatory: Individual ID and Phenotype. The Individual IDs are alphanumeric and should uniquely identify a person. The second column is phenotype which can be either a quantitative trait or an affection status. Affection status should be coded as 1 and 2 for unaffected and affected, respectively.
 
@@ -49,6 +81,13 @@ No header row should be given. For example, here are two individuals typed for 6
 **Note:** There are one case and one control. The six genes are: HLA-A, HLA-B, HLA-C, HLA-DQA1, HLA-DQB1 and HLA-DRB1. Each gene has two columns.
 
 **Note:** Individual `0002` does not have genotype for HLA-DQA1 (two `NA`). All alleles have six digits resolution except that one allele of HLA-C of individual `0002` only has four digits resolution. It is fine if we only want to test association at two or four digits resolution.  
+
+### 2) Digits resolution (-d or --digits)   
+
+Test of association using two digits or four digits genotype. Default value is 4.
+
+### 3) Genetic model to test (-m or --model)   
+
 
 ## Output
 
