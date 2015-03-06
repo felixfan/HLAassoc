@@ -150,6 +150,18 @@ For example,
 --covar cov.txt --covarname age,sex,bmi
 ```
 
+### 7) Minimal allele/allele group frequency (-f or --freq)
+
+A value between 0 and 1. Only alleles/allele groups have frequency higher than this threshold will be included. Default value is 0.05.
+
+### 8) Adjustment for multiple testing (-a or --adjust)
+
+```
+Bonferroni         Bonferroni single-step adjusted p-values
+Holm               Holm (1979) step-down adjusted p-values
+FDR                Benjamini & Hochberg (1995) step-up FDR control
+```
+
 ## Usage
 
 ## Output
