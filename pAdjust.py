@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 def adjustP(pvalues, method = "Benjamini-Hochberg"):                
     """                                                                                                   
     correct p-values for multiple testing

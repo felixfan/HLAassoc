@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import random
+
 def allelicCount(infile, digits):
 	'''
 	count all alleles
@@ -9,6 +11,16 @@ def allelicCount(infile, digits):
 	control = {}
 	np = {}         # total non-NA alleles for each gene
 	nc = {}
+
+	f = open(infile) # read all phenotype
+	pht = []
+	for line in f:
+		line = line.rstrip()
+		pht.append(line.split()[1])
+	f.close()
+	random.shuffle(pht)
+	l = 0     # line index
+
 	f = open(infile)
 	for line in f:
 		line = line.rstrip()
@@ -21,7 +33,7 @@ def allelicCount(infile, digits):
 				elif digits == 2:
 					a4d = names[0]
 				
-				if alleles[1] == "2":
+				if pht[l] == "2":
 					if a4d.split("*")[0] in np:
 						np[a4d.split("*")[0]] += 1
 					else:
@@ -31,7 +43,7 @@ def allelicCount(infile, digits):
 						case[a4d] += 1
 					else:
 						case[a4d] = 1
-				elif alleles[1] == "1":
+				elif pht[l] == "1":
 					if a4d.split("*")[0] in nc:
 						nc[a4d.split("*")[0]] += 1
 					else:
@@ -41,6 +53,7 @@ def allelicCount(infile, digits):
 						control[a4d] += 1
 					else:
 						control[a4d] = 1
+		l += 1
 	f.close()
 	return case, control, np, nc
 
@@ -53,6 +66,16 @@ def domCount(infile, digits):
 	control = {}
 	nc = {}
 	np = {}
+
+	f = open(infile) # read all phenotype
+	pht = []
+	for line in f:
+		line = line.rstrip()
+		pht.append(line.split()[1])
+	f.close()
+	random.shuffle(pht)
+	l = 0     # line index
+
 	f = open(infile)
 	for line in f:
 		line = line.rstrip()
@@ -69,7 +92,7 @@ def domCount(infile, digits):
 					a4d1 = names1[0]
 					a4d2 = names2[0]
 
-				if alleles[1] == "2":
+				if pht[l] == "2":
 					if a4d1.split('*')[0] in np:
 						np[a4d1.split('*')[0]] += 1
 					else:
@@ -87,7 +110,7 @@ def domCount(infile, digits):
 							case[a4d2] = 1
 						
 
-				elif alleles[1] == "1":
+				elif pht[l] == "1":
 					if a4d1.split('*')[0] in nc:
 						nc[a4d1.split('*')[0]] += 1
 					else:
@@ -102,7 +125,8 @@ def domCount(infile, digits):
 						if a4d2 in control:
 							control[a4d2] += 1
 						else:
-							control[a4d2] = 1	
+							control[a4d2] = 1
+		l += 1
 	f.close()
 	return case, control, np, nc
 
@@ -115,6 +139,16 @@ def recCount(infile, digits):
 	control = {}
 	nc = {}
 	np = {}
+
+	f = open(infile) # read all phenotype
+	pht = []
+	for line in f:
+		line = line.rstrip()
+		pht.append(line.split()[1])
+	f.close()
+	random.shuffle(pht)
+	l = 0     # line index
+
 	f = open(infile)
 	for line in f:
 		line = line.rstrip()
@@ -131,7 +165,7 @@ def recCount(infile, digits):
 					a4d1 = names1[0]
 					a4d2 = names2[0]
 
-				if alleles[1] == "2":
+				if pht[l] == "2":
 					if a4d1.split('*')[0] in np:
 						np[a4d1.split('*')[0]] += 1
 					else:
@@ -143,7 +177,7 @@ def recCount(infile, digits):
 						else:
 							case[a4d2] = 1
 
-				elif alleles[1] == "1":
+				elif pht[l] == "1":
 					if a4d1.split('*')[0] in nc:
 						nc[a4d1.split('*')[0]] += 1
 					else:
@@ -154,5 +188,6 @@ def recCount(infile, digits):
 							control[a4d2] += 1
 						else:
 							control[a4d2] = 1
+		l += 1
 	f.close()
 	return case, control, np, nc

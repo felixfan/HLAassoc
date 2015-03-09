@@ -4,9 +4,10 @@ import argparse
 import HLAtest
 import HLAregression
 import pAdjust
+import HLAperm
 
 parser = argparse.ArgumentParser(description='HLA Association Analysis', prog="HLAassoc.py")
-parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.1')
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2')
 parser.add_argument('-i', '--file', help='input file', required=True, type=str)
 parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4])
 parser.add_argument('-m', '--model', help='genetic model, default allelic', default='allelic', type=str, choices=['allelic','dom','rec'])
@@ -16,7 +17,8 @@ parser.add_argument('-n', '--covarname', help='select a particular subset of cov
 parser.add_argument('-f', '--freq', help='minimal frequency, default 0.05', default=0.05, type=float)
 parser.add_argument('-a', '--adjust', help='p value correction, default FDR', default='FDR', type=str,choices=['FDR','Bonferroni','Holm'])
 parser.add_argument('-o', '--out', help='output file', default='hlaassoc.txt')
-parser.add_argument('-p', '--print', help='print output to screen', type=bool, default=False, choices=[False, True])
+parser.add_argument('-V', '--print', help='print output to screen', type=bool, default=False, choices=[False, True])
+parser.add_argument('-p', '--perm', help='number of permutation', type=int)
 
 args = vars(parser.parse_args())
 
@@ -36,9 +38,13 @@ if 'covar' in args:
 if 'covarname' in args:
 	COVNAME = args['covarname']
 
+PERM = 0
+if 'perm' in args:
+	PERM = args['perm']
+
 #####################################################################
 print "@-------------------------------------------------------------@"
-print "|       HLAassoc       |     v 1.1     |     12 Feb 2015      |"
+print "|       HLAassoc       |     v 1.2     |      9 Mar 2015      |"
 print "|-------------------------------------------------------------|"
 print "|  (C) 2015 Felix Yanhui Fan, GNU General Public License, v2  |"
 print "|-------------------------------------------------------------|"
@@ -59,19 +65,32 @@ else:
 print "\t--freq", FREQ
 print "\t--adjust", ADJUST
 print "\t--print", PRINT
+if PERM:
+	print "\t--perm", PERM
 print "\t--out", OUTFILE
 print
 #####################################################################
+### permutation
+if PERM:
+	if TEST == 'chisq' or TEST == 'fisher':
+		permp = HLAperm.chisqFisherPerm(INFILE, DIGIT, MODEL, TEST, PERM)
+	elif TEST == 'logistic' or TEST == 'linear':
+		if COVFILE:
+			permp = HLAperm.regressionCovPerm(INFILE, DIGIT, TEST, PERM, COVFILE, COVNAME)
+		else:
+			permp = HLAperm.regressionPerm(INFILE, DIGIT, TEST, PERM)
 ### output header
 f = open(OUTFILE,"w")
 if TEST == 'chisq':
-	header = ("ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Chisq","DF","P_chisq","OR","L95","U95","P_adj")
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Chisq","DF","P_chisq","OR","L95","U95","P_adj"]
 elif TEST == 'fisher':
-	header = ("ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_Fisher","OR","L95","U95","P_adj")
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_Fisher","OR","L95","U95","P_adj"]
 elif TEST == 'logistic':
-	header = ("ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_logistic","OR","L95","U95","P_adj")
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_logistic","OR","L95","U95","P_adj"]
 elif TEST == 'linear':
-	header = ("ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_linear","beta","L95","U95","P_adj")
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_linear","beta","L95","U95","P_adj"]
+if PERM:
+	header.append('P_perm')
 for h in header:
 	if PRINT:
 		print "%12s" % h,
@@ -129,8 +148,27 @@ for r in rs:                        ### GENE BY GENE
 				f.write("%12s" % word,)
 			tmp = cp.pop(0)
 			if PRINT:
-				print "%12s" % str(round(tmp,6))
-			f.write('%12s\n' % str(round(tmp,6)))
+				print "%12s" % str(round(tmp,6)),
+			f.write('%12s' % str(round(tmp,6)))
+			if PERM:
+				if key in permp:
+					if PRINT:
+						if permp[key] != 'NA':
+							print "%12s" % str(round(permp[key],6)),
+						else:
+							print "%12s" % 'NA',
+					if permp[key] != 'NA':
+						f.write('%12s' % str(round(permp[key],6)))
+					else:
+						f.write('%12s' % 'NA')
+				else:
+					if PRINT:
+						print "%12s" % 'NA',
+					f.write('%12s' % 'NA')
+			# new line
+			if PRINT:
+				print
+			f.write('\n')
 f.close()
 
 ##############################################################
