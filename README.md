@@ -164,6 +164,18 @@ Holm               Holm (1979) step-down adjusted p-values
 FDR                Benjamini & Hochberg (1995) step-up FDR control
 ```
 
+### 9) Permutation (-p or --perm)
+
+Number of permutation will be performed.   
+
+For each permutation run, a simulated dataset is constructed from the original dataset by randomizing the assignment of phenotype status among individuals. The same individuals are used, maintaining the same LD structure and the original case/control ratio. 
+
+### 10) Output file name (-o or --out)
+
+### 11) Print output to screen (-V or --print)
+
+Default value is `False`.
+
 ## Usage
 
 ## Output
