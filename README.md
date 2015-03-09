@@ -144,11 +144,13 @@ To select a particular subset of covariates, use `--covarname covarnames` comman
 For example,
 
 ```
---covar cov.txt
---covar cov.txt --covarname bmi
---covar cov.txt --covarname age,bmi
---covar cov.txt --covarname age,sex,bmi
+--covar cov.txt                                    # use all covariates in cov.txt
+--covar cov.txt --covarname bmi                    # only use `bmi`
+--covar cov.txt --covarname age,bmi                # use both `age` and `bmi`
+--covar cov.txt --covarname age,sex,bmi            # use all three covariates
 ```
+
+**Note:** if `--covarname covarnames` command is not specified, all covariates in cov.txt will be used.
 
 ### 7) Minimal allele/allele group frequency (-f or --freq)
 
