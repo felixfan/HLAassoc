@@ -16,9 +16,11 @@ def adjustP(pvalues, method = "Benjamini-Hochberg"):
     		pvalue, i = vals
     		cp[i] = (n-rank) * pvalue
     	for rank, vals in enumerate(values):
-    		pvalue, i = vals                                                        
+    		pvalue, i = vals                                                      
     		if rank > 0:
         		cp[i] = min(1.0, max(cp[i], cp[j]))
+        	else:
+        		cp[i] = min(1.0, cp[i])
     		j = i
     elif method == "Benjamini-Hochberg" or method == "FDR":
     	values = [ (pvalue, i) for i, pvalue in enumerate(pvalues) ]
@@ -30,6 +32,8 @@ def adjustP(pvalues, method = "Benjamini-Hochberg"):
 			pvalue, i = vals
 			if rank > 0:
 				cp[i] = min(1.0, min(cp[i], cp[j]))
+			else:
+				cp[i] = min(1.0, cp[i])
 			j = i
     return cp
 
