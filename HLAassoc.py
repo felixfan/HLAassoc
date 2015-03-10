@@ -7,9 +7,9 @@ import pAdjust
 import HLAperm
 
 parser = argparse.ArgumentParser(description='HLA Association Analysis', prog="HLAassoc.py")
-parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2')
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2.1')
 parser.add_argument('-i', '--file', help='input file', required=True, type=str)
-parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4])
+parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4,6])
 parser.add_argument('-m', '--model', help='genetic model, default allelic', default='allelic', type=str, choices=['allelic','dom','rec'])
 parser.add_argument('-t', '--test', help='statistical test method, default chisq', default='chisq', type=str, choices=['chisq','fisher','logistic','linear'])
 parser.add_argument('-c', '--covar', help='covariants file', type=str)
@@ -44,7 +44,7 @@ if 'perm' in args:
 
 #####################################################################
 print "@-------------------------------------------------------------@"
-print "|       HLAassoc       |     v 1.2     |      9 Mar 2015      |"
+print "|       HLAassoc       |     v 1.3     |     10 Mar 2015      |"
 print "|-------------------------------------------------------------|"
 print "|  (C) 2015 Felix Yanhui Fan, GNU General Public License, v2  |"
 print "|-------------------------------------------------------------|"
@@ -108,7 +108,10 @@ elif TEST == 'logistic' or TEST == 'linear':
 	if COVFILE:
 		ans = HLAregression.regressionCov(INFILE, DIGIT, FREQ, TEST, COVFILE, COVNAME)
 	else:
-		ans = HLAregression.regression(INFILE, DIGIT, FREQ, TEST)
+		if TEST == 'logistic':
+			ans = HLAregression.regressionLogistic(INFILE, DIGIT, FREQ, TEST)
+		else:
+			ans = HLAregression.regressionLinear(INFILE, DIGIT, FREQ, TEST)
 	alleles =sorted(ans.keys())
 	genes = {}
 	for allele in alleles:
@@ -126,6 +129,8 @@ elif TEST == 'logistic' or TEST == 'linear':
 ### position of p value
 if TEST == 'chisq':
 	pp = 9
+if TEST == 'linear':
+	pp = 1
 else:
 	pp = 7
 
@@ -136,20 +141,28 @@ for r in rs:                        ### GENE BY GENE
 	### get p values for a group
 	for key in keys:
 		words = r[key].split()
-		ps.append(float(words[pp]))
+		if words[pp] != 'NA':
+			ps.append(float(words[pp]))
 	### adjust p
 	cp = pAdjust.adjustP(ps,ADJUST)
 	### output
 	for key in keys:
 			words = r[key].split()
-			for word in words:
+			for word in words: # test results
 				if PRINT:
 					print "%12s" % word,
 				f.write("%12s" % word,)
-			tmp = cp.pop(0)
-			if PRINT:
-				print "%12s" % str(round(tmp,6)),
-			f.write('%12s' % str(round(tmp,6)))
+			### adjust
+			if words[pp] != 'NA':
+				tmp = cp.pop(0)
+				if PRINT:
+					print "%12s" % str(round(tmp,6)),
+				f.write('%12s' % str(round(tmp,6)))
+			else:
+				if PRINT:
+					print "%12s" % ('NA'),
+				f.write('%12s' % ('NA'))
+			### perm
 			if PERM:
 				if key in permp:
 					if PRINT:

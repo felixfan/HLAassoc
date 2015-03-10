@@ -35,7 +35,7 @@ def getAlleles(infile, digits):
 	f.close()
 	return geneAlleles, geneCol
 
-def allelicRecode(infile, digits):
+def allelicRecode(infile, digits, test):
 	'''
 	allele dosage coding
 	Assume A*01:01 is the test allele, then A*01:01 A*01:01 is code as 2
@@ -52,7 +52,10 @@ def allelicRecode(infile, digits):
 	for line in f:
 		line = line.rstrip()
 		alleles = line.split()
-		ans[alleles[0]] = [alleles[0],int(alleles[1])-1]
+		if test == 'logistic':
+			ans[alleles[0]] = [alleles[0],int(alleles[1])-1]
+		elif test == 'linear':
+			ans[alleles[0]] = [alleles[0],alleles[1]]
 		for i in range(2,len(alleles),2):
 			j = i + 1
 			if alleles[i] != 'NA' and alleles[j] != 'NA':
@@ -83,7 +86,7 @@ def allelicRecode(infile, digits):
 					ans[alleles[0]].append('NA')
 	return ans,header
 
-def writeRecode(infile, digits):
+def writeRecode(infile, digits, test):
 	'''
 	write coding to a temp file
 	return the temp file name
@@ -92,7 +95,7 @@ def writeRecode(infile, digits):
 	tmp = time.strftime("%H%M%S%d%b%Y")
 	tmp = tmp + '.txt'
 	f = open(tmp,'w')
-	ans, header = allelicRecode(infile, digits)
+	ans, header = allelicRecode(infile, digits, test)
 	for i in header:
 		i = string.replace(i, '*', '_') # chang A*01:01 to A_01_01
 		i = string.replace(i, ':', '_')

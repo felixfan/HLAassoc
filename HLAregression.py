@@ -7,14 +7,14 @@ import os
 import sys
 import HLArecode
 
-def regression(infile, digits, freq, method):
+def regressionLogistic(infile, digits, freq, method):
 	'''
-	linear regression or logistitic regression
-	output: dictionary, key: allele, value: statistic includes count, freq, p and OR/beta
+	logistitic regression
+	output: dictionary, key: allele, value: statistic includes count, freq, p and OR
 	'''
-	tfile = HLArecode.writeRecode(infile, digits)
+	tfile = HLArecode.writeRecode(infile, digits, method)
 	geno = pd.read_csv(tfile,delim_whitespace= True, header = 0)
-	os.remove(tfile)
+	#os.remove(tfile)
 	alleles = list(geno.columns.values)[2:]
 	assoc = {}
 	for allele in alleles:
@@ -49,32 +49,82 @@ def regression(infile, digits, freq, method):
 					OR = 'NA'
 					L95 = 'NA'
 					U95 = 'NA'
-			elif method == 'linear':
-				try:
-					lr = smf.ols(formula = myformula, data = geno).fit(maxiter=100, disp=False)
-					p = lr.pvalues[1]
-					beta = lr.params[1]
-					L95 = lr.conf_int()[0][1]
-					U95 = lr.conf_int()[1][1]
-				except:
-					p = 'NA'
-					beta = 'NA'
-					L95 = 'NA'
-					U95 = 'NA'
 			aname = allele.split('_')
 			nname = aname[0] + '*' + aname[1]
 			if digits == 4:
 				nname = nname + ':' + aname[2]
 			s1 = nname + '\t' + str(n1) + '\t' + str(n2) + '\t' + str(n3) + '\t' + str(n4)
 			s2 = '\t' + str(round(f1,4)) + '\t' + str(round(f2,4))
-			if method == "logistic":
-				s3 = '\t' + str(round(p,6)) + '\t' + str(round(OR,4))
-			elif method == "linear":
-				s3 = '\t' + str(round(p,6)) + '\t' + str(round(beta,4))
-			s4 = '\t' + str(round(L95,4)) + '\t' + str(round(U95,4))
+
+			if p != 'NA':
+				s3 = '\t' + str(round(p,6))
+			else:
+				s3 = '\t' + 'NA'
+
+			if method == "logistic":	
+				if OR != 'NA':
+					s3 = s3 + '\t' + str(round(OR,4))
+				else:
+					s3 = s3 + '\t' + 'NA'
+			if L95 != 'NA':
+				s4 = '\t' + str(round(L95,4))
+			else:
+				s4 = '\t' + 'NA'
+			if U95 != 'NA':
+				s4 = s4 + '\t' + str(round(U95,4))
+			else:
+				s4 = s4 + '\t' + 'NA'
 			assoc[nname] = s1 + s2 + s3 + s4
 	return assoc
+def regressionLinear(infile, digits, freq, method):
+	'''
+	linear regression
+	output: dictionary, key: allele, value: statistic includes p and beta
+	'''
+	tfile = HLArecode.writeRecode(infile, digits, method)
+	geno = pd.read_csv(tfile,delim_whitespace= True, header = 0)
+	#os.remove(tfile)
+	alleles = list(geno.columns.values)[2:]
+	assoc = {}
+	for allele in alleles:
+		myformula = 'PHT ~ ' + allele
+		if method == 'linear':
+			try:
+				lr = smf.ols(formula = myformula, data = geno).fit(maxiter=100, disp=False)
+				p = lr.pvalues[1]
+				beta = lr.params[1]
+				L95 = lr.conf_int()[0][1]
+				U95 = lr.conf_int()[1][1]
+			except:
+				p = 'NA'
+				beta = 'NA'
+				L95 = 'NA'
+				U95 = 'NA'
+		aname = allele.split('_')
+		nname = aname[0] + '*' + aname[1]
+		if digits == 4:
+			nname = nname + ':' + aname[2]
+		s1 = nname
+		if p != 'NA':
+			s3 = '\t' + str(round(p,6))
+		else:
+			s3 = '\t' + 'NA'
 
+		if method == "linear":
+			if beta != 'NA':
+				s3 = s3 + '\t' + str(round(beta,4))
+			else:
+				s3 = s3 + '\t' + 'NA'
+		if L95 != 'NA':
+			s4 = '\t' + str(round(L95,4))
+		else:
+			s4 = '\t' + 'NA'
+		if U95 != 'NA':
+			s4 = s4 + '\t' + str(round(U95,4))
+		else:
+			s4 = s4 + '\t' + 'NA'
+		assoc[nname] = s1 + s3 + s4
+	return assoc
 def regressionCov(infile, digits, freq, method, covfile, covname):
 	'''
 	linear regression or logistitic regression with covariants
@@ -149,10 +199,28 @@ def regressionCov(infile, digits, freq, method, covfile, covname):
 				nname = nname + ':' + aname[2]
 			s1 = nname + '\t' + str(n1) + '\t' + str(n2) + '\t' + str(n3) + '\t' + str(n4)
 			s2 = '\t' + str(round(f1,4)) + '\t' + str(round(f2,4))
-			if method == "logistic":
-				s3 = '\t' + str(round(p,6)) + '\t' + str(round(OR,4))
+			if p != 'NA':
+				s3 = '\t' + str(round(p,6))
+			else:
+				s3 = '\t' + 'NA'
+
+			if method == "logistic":	
+				if OR != 'NA':
+					s3 = s3 + '\t' + str(round(OR,4))
+				else:
+					s3 = s3 + '\t' + 'NA'
 			elif method == "linear":
-				s3 = '\t' + str(round(p,6)) + '\t' + str(round(beta,4))
-			s4 = '\t' + str(round(L95,4)) + '\t' + str(round(U95,4))
+				if beta != 'NA':
+					s3 = s3 + '\t' + str(round(beta,4))
+				else:
+					s3 = s3 + '\t' + 'NA'
+			if L95 != 'NA':
+				s4 = '\t' + str(round(L95,4))
+			else:
+				s4 = '\t' + 'NA'
+			if U95 != 'NA':
+				s4 = s4 + '\t' + str(round(U95,4))
+			else:
+				s4 = s4 + '\t' + 'NA'
 			assoc[nname] = s1 + s2 + s3 + s4
 	return assoc

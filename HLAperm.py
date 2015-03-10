@@ -62,13 +62,16 @@ def chisqFisherPerm(infile, digit, model, test, perm):
 				elif test == 'fisher':
 					OR, p = scipy.stats.fisher_exact(data)
 				if a in origP:
-					if p < origP[a]:
+					if isinstance(p, float) and p < origP[a]:
 						if a in permP:
 							permP[a] += 1
 						else:
 							permP[a] = 1
-	for a in permP:
-		permP[a] = 1.0 * permP[a] / perm
+	for a in origP:
+		if a in permP:
+			permP[a] = 1.0 * (permP[a] + 1) / (perm + 1)
+		else:
+			permP[a] = 'NA'
 	return permP
 
 def regressionPerm(infile, digits, method,perm):
@@ -132,9 +135,11 @@ def regressionPerm(infile, digits, method,perm):
 						permP[nname] += 1
 					else:
 						permP[nname] = 1
-	for a in permP:
-		if permP[a] != 'NA':
-			permP[a] = 1.0 * permP[a] / perm
+	for a in assoc:
+		if a in permP:
+			permP[a] = 1.0 * (permP[a] + 1) / (perm + 1)
+		else:
+			permP[a] = 'NA'
 	return permP
 
 def regressionCovPerm(infile, digits, method, perm, covfile, covname):
@@ -220,7 +225,9 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname):
 						permP[nname] += 1
 					else:
 						permP[nname] = 1
-	for a in permP:
-		if permP[a] != 'NA':
-			permP[a] = 1.0 * permP[a] / perm
+	for a in assoc:
+		if a in permP:
+			permP[a] = 1.0 * (permP[a] + 1) / (perm + 1)
+		else:
+			permP[a] = 'NA'
 	return permP
