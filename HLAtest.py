@@ -24,10 +24,13 @@ def assocADRChiFisher(caseAlleles, ctrlAlleles, np, nc, allele, freq, test):
 	### freq
 	freqCase = {}
 	freqCtrl = {}
+	freqAll = {}
 	for a in case:
 		freqCase[a] = 1.0 * case[a] / np[allele]
 	for a in ctrl:
 		freqCtrl[a] = 1.0 * ctrl[a] / nc[allele]
+		if a in case:
+			freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[allele] + nc[allele])
 	### assoc
 	for a in case:
 		if a in ctrl:
@@ -49,6 +52,7 @@ def assocADRChiFisher(caseAlleles, ctrlAlleles, np, nc, allele, freq, test):
 
 				s1 = a + '\t' + str(n1) + '\t' + str(n2) + '\t' + str(n3) + '\t' + str(n4)
 				s2 = '\t' + str(round(freqCase[a],4)) + '\t' + str(round(freqCtrl[a],4))
+				s2 = s2 + '\t' + str(round(freqAll[a],4))
 				if test == "chisq":
 					s3 = '\t' + str(round(chi2,4)) + '\t' + str(dof) + '\t' + str(round(p,6))
 				elif test == "fisher":

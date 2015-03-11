@@ -82,13 +82,13 @@ if PERM:
 ### output header
 f = open(OUTFILE,"w")
 if TEST == 'chisq':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Chisq","DF","P_chisq","OR","L95","U95","P_adj"]
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","Chisq","DF","P_chisq","OR","L95","U95","P_adj"]
 elif TEST == 'fisher':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_Fisher","OR","L95","U95","P_adj"]
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_Fisher","OR","L95","U95","P_adj"]
 elif TEST == 'logistic':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_logistic","OR","L95","U95","P_adj"]
+	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_logistic","OR","L95","U95","P_adj"]
 elif TEST == 'linear':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","P_linear","beta","L95","U95","P_adj"]
+	header = ["ID","Freq","P_linear","beta","L95","U95","P_adj"]
 if PERM:
 	header.append('P_perm')
 for h in header:
@@ -106,7 +106,10 @@ if TEST == 'chisq' or TEST == 'fisher':
 	rs = HLAtest.runAssoc(INFILE, DIGIT, FREQ, MODEL, TEST)
 elif TEST == 'logistic' or TEST == 'linear':
 	if COVFILE:
-		ans = HLAregression.regressionCov(INFILE, DIGIT, FREQ, TEST, COVFILE, COVNAME)
+		if TEST == 'logistic':
+			ans = HLAregression.logisticCov(INFILE, DIGIT, FREQ, TEST, COVFILE, COVNAME)
+		else:
+			ans = HLAregression.linearCov(INFILE, DIGIT, FREQ, TEST, COVFILE, COVNAME)
 	else:
 		if TEST == 'logistic':
 			ans = HLAregression.regressionLogistic(INFILE, DIGIT, FREQ, TEST)
@@ -128,11 +131,11 @@ elif TEST == 'logistic' or TEST == 'linear':
 ### adjust p values and write output
 ### position of p value
 if TEST == 'chisq':
-	pp = 9
-if TEST == 'linear':
-	pp = 1
+	pp = 10
+elif TEST == 'linear':
+	pp = 2
 else:
-	pp = 7
+	pp = 8
 
 for r in rs:                        ### GENE BY GENE
 	keys = r.keys()
