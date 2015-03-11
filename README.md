@@ -173,6 +173,8 @@ For each permutation run, a simulated dataset is constructed from the original d
 
 ### 10) Output file name (-o or --out)
 
+Default value is `hlaassoc.txt`.
+
 ### 11) Print output to screen (-V or --print)
 
 Default value is `False`.
