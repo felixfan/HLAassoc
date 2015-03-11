@@ -182,8 +182,25 @@ Default value is `False`.
 Output contains several fields depend on which commands were used.  
 
 ```
-ID
-
+ID            Allele name
+A_case        Count of this allele in cases
+B_case        Count of other alleles in cases
+A_ctrl        Count of this allele in controls
+B_ctrl        Count of other allele in controls
+F_case        Frequency of this allele in cases
+F_ctrl        Frequency of this allele in controls
+Freq          Frequency of this allele in cases and controls
+Chisq
+DF
+P_chisq
+P_Fisher
+P_logistic
+P_linear
+OR
+L95
+U95
+P_adj
+P_perm
 ```
 
 ## Usage
