@@ -190,17 +190,18 @@ B_ctrl        Count of other allele in controls
 F_case        Frequency of this allele in cases
 F_ctrl        Frequency of this allele in controls
 Freq          Frequency of this allele in cases and controls
-Chisq
-DF
-P_chisq
-P_Fisher
-P_logistic
-P_linear
-OR
-L95
-U95
-P_adj
-P_perm
+Chisq         Chi-square
+DF            Degree of freedom
+P_chisq       P-value for Pearson's chi-squared test
+P_Fisher      P-value for Fisher's exact test
+P_logistic    P-value for logistic regression
+P_linear      P-value for linear regression
+OR            Odds ratio
+beta          Regression coefficient
+L95           Lower bound of 95% confidence interval for odds ratio or regression coefficient
+U95           Upper bound of 95% confidence interval for odds ratio or regression coefficient
+P_adj         Multiple testing adjusted p value 
+P_perm        P-value for permutation test
 ```
 
 ## Usage
