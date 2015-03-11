@@ -177,9 +177,15 @@ For each permutation run, a simulated dataset is constructed from the original d
 
 Default value is `False`.
 
-## Usage
-
 ## Output
 
+Output contains several fields depend on which commands were used.  
+
+```
+ID
+
+```
+
+## Usage
 
 
