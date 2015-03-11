@@ -179,6 +179,10 @@ Default value is `hlaassoc.txt`.
 
 Default value is `False`.
 
+### 12) Random seed (-s or --seed)
+
+A number used to initialize the basic random number generator. By default, the current system time is used. 
+
 ## Output
 
 Output contains several fields depend on which commands were used.  
