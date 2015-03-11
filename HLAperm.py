@@ -79,7 +79,7 @@ def regressionPerm(infile, digits, method,perm):
 	linear regression or logistitic regression
 	output: dictionary, key: allele, value: p-value
 	'''
-	tfile = HLArecode.writeRecode(infile, digits)
+	tfile = HLArecode.writeRecode(infile, digits, method)
 	geno = pd.read_csv(tfile,delim_whitespace= True, header = 0)
 	os.remove(tfile)
 	alleles = list(geno.columns.values)[2:]
@@ -103,6 +103,8 @@ def regressionPerm(infile, digits, method,perm):
 		nname = aname[0] + '*' + aname[1]
 		if digits == 4:
 			nname = nname + ':' + aname[2]
+		elif digits == 6:
+			nname = nname + ':' + aname[2] + ':' + aname[3]
 		assoc[nname] = p
 	# premutation
 	permP = {}
@@ -116,6 +118,8 @@ def regressionPerm(infile, digits, method,perm):
 			nname = aname[0] + '*' + aname[1]
 			if digits == 4:
 				nname = nname + ':' + aname[2]
+			elif digits == 6:
+				nname = nname + ':' + aname[2] + ':' + aname[3]
 			if nname in assoc:
 				myformula = 'PHT ~ ' + allele
 				if method == 'logistic':
@@ -147,7 +151,7 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname):
 	linear regression or logistitic regression with covariants
 	output: dictionary, key: allele, value: p-value
 	'''
-	tfile = HLArecode.writeRecode(infile, digits)
+	tfile = HLArecode.writeRecode(infile, digits,method)
 	geno = pd.read_csv(tfile,delim_whitespace= True, header = 0)
 	cov = pd.read_csv(covfile,delim_whitespace= True, header = 0)
 	os.remove(tfile)
@@ -185,6 +189,8 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname):
 			nname = aname[0] + '*' + aname[1]
 			if digits == 4:
 				nname = nname + ':' + aname[2]
+			elif digits == 6:
+				nname = nname + ':' + aname[2] + ':' + aname[3]
 			assoc[nname] = p
 	# permutation test
 	permP = {}
@@ -198,6 +204,8 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname):
 			nname = aname[0] + '*' + aname[1]
 			if digits == 4:
 				nname = nname + ':' + aname[2]
+			elif digits == 6:
+				nname = nname + ':' + aname[2] + ':' + aname[3]
 			if nname in assoc:
 				geno9 = geno.ix[:, ['IID', 'PHT', allele]]
 				mydata = pd.merge(geno9, cov, on='IID', how='inner')
