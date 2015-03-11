@@ -88,7 +88,7 @@ No header row should be given. For example, here are two individuals typed for 6
 
 ### 2) Digits resolution (-d or --digits)   
 
-Test of association using two digits or four digits. When two was used, alleles such as `A*02:01` and `A*02:06` will be combined as `A*02`. Default value is 4.
+Test of association using two digits, four digits or six digits. When two was used, alleles such as `A*02:01` and `A*02:06` will be combined as `A*02`. Default value is 4.
 
 ### 3) Genetic model to test (-m or --model)   
 
@@ -155,7 +155,7 @@ For example,
 
 ### 7) Minimal allele/allele group frequency (-f or --freq)
 
-A value between 0 and 1. Only alleles/allele groups have frequency higher than this threshold will be included. Default value is 0.05.
+A value between 0 and 1. Only alleles/allele groups have frequency higher than this threshold will be included in association analysis. Default value is 0.05. For quantitative traits, allele frequency in the whole dataset is used to compare with the threshold. For disease traits, one allele will be included if its frequency in case or control is higher than the threshold.
 
 ### 8) Adjustment for multiple testing (-a or --adjust)
 
