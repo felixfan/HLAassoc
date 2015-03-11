@@ -7,7 +7,7 @@ import pAdjust
 import HLAperm
 
 parser = argparse.ArgumentParser(description='HLA Association Analysis', prog="HLAassoc.py")
-parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.2.1')
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.3')
 parser.add_argument('-i', '--file', help='input file', required=True, type=str)
 parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4,6])
 parser.add_argument('-m', '--model', help='genetic model, default allelic', default='allelic', type=str, choices=['allelic','dom','rec'])
