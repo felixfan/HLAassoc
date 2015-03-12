@@ -1,7 +1,7 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
 ## News
-
+* v1.3 (10 Mar 2015): add allele frequency to output
 * v1.2 (9 Mar 2015): permutation test was added
 * v1.1 (16 Feb 2015): linear and logistic regression were added
 * v1.0 (23 Jan 2015): initial release.
