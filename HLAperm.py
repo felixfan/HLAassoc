@@ -10,7 +10,7 @@ import HLAcountPerm
 import HLAcount
 import HLArecode
 
-def chisqFisherPerm(infile, digit, model, test, perm):
+def chisqFisherPerm(infile, digit, model, test, perm, seed):
 	'''
 	permutation
 	input: genotype, digit to test, genetic model, chisq or Fisher test, number of permutation to run.
@@ -38,6 +38,7 @@ def chisqFisherPerm(infile, digit, model, test, perm):
 				OR, p = scipy.stats.fisher_exact(data)
 			origP[a] = p
 	# premutation
+	random.seed(seed)
 	permP = {}
 	pf = perm / 10
 	for i in range(perm):
@@ -74,7 +75,7 @@ def chisqFisherPerm(infile, digit, model, test, perm):
 			permP[a] = 'NA'
 	return permP
 
-def regressionPerm(infile, digits, method,perm):
+def regressionPerm(infile, digits, method,perm,seed):
 	'''
 	linear regression or logistitic regression
 	output: dictionary, key: allele, value: p-value
@@ -107,6 +108,7 @@ def regressionPerm(infile, digits, method,perm):
 			nname = nname + ':' + aname[2] + ':' + aname[3]
 		assoc[nname] = p
 	# premutation
+	random.seed(seed)
 	permP = {}
 	pf = perm / 10
 	for i in range(perm):
@@ -146,7 +148,7 @@ def regressionPerm(infile, digits, method,perm):
 			permP[a] = 'NA'
 	return permP
 
-def regressionCovPerm(infile, digits, method, perm, covfile, covname):
+def regressionCovPerm(infile, digits, method, perm, covfile, covname,seed):
 	'''
 	linear regression or logistitic regression with covariants
 	output: dictionary, key: allele, value: p-value
@@ -193,6 +195,7 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname):
 				nname = nname + ':' + aname[2] + ':' + aname[3]
 			assoc[nname] = p
 	# permutation test
+	random.seed(seed)
 	permP = {}
 	pf = perm / 10
 	for i in range(perm):

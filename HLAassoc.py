@@ -19,6 +19,7 @@ parser.add_argument('-a', '--adjust', help='p value correction, default FDR', de
 parser.add_argument('-o', '--out', help='output file', default='hlaassoc.txt')
 parser.add_argument('-V', '--print', help='print output to screen', type=bool, default=False, choices=[False, True])
 parser.add_argument('-p', '--perm', help='number of permutation', type=int)
+parser.add_argument('-s', '--seed', help='random seed', type=int)
 
 args = vars(parser.parse_args())
 
@@ -29,7 +30,8 @@ DIGIT = args['digits']
 MODEL = args['model']
 ADJUST = args['adjust']
 TEST = args['test']
-PRINT =args['print']
+PRINT = args['print']
+SEED = args['seed']
 
 COVFILE = False
 COVNAME = False
@@ -67,18 +69,20 @@ print "\t--adjust", ADJUST
 print "\t--print", PRINT
 if PERM:
 	print "\t--perm", PERM
+	if SEED:
+		print "\t--seed", SEED
 print "\t--out", OUTFILE
 print
 #####################################################################
 ### permutation
 if PERM:
 	if TEST == 'chisq' or TEST == 'fisher':
-		permp = HLAperm.chisqFisherPerm(INFILE, DIGIT, MODEL, TEST, PERM)
+		permp = HLAperm.chisqFisherPerm(INFILE, DIGIT, MODEL, TEST, PERM, SEED)
 	elif TEST == 'logistic' or TEST == 'linear':
 		if COVFILE:
-			permp = HLAperm.regressionCovPerm(INFILE, DIGIT, TEST, PERM, COVFILE, COVNAME)
+			permp = HLAperm.regressionCovPerm(INFILE, DIGIT, TEST, PERM, COVFILE, COVNAME, SEED)
 		else:
-			permp = HLAperm.regressionPerm(INFILE, DIGIT, TEST, PERM)
+			permp = HLAperm.regressionPerm(INFILE, DIGIT, TEST, PERM,SEED)
 ### output header
 f = open(OUTFILE,"w")
 if TEST == 'chisq':
