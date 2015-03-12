@@ -39,10 +39,10 @@ The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/arc
 
 ```
 python HLAassoc.py -h
-usage: HLAassoc.py [-h] [-v] -i FILE [-d {2,4}] [-m {allelic,dom,rec}]
+usage: HLAassoc.py [-h] [-v] -i FILE [-d {2,4,6}] [-m {allelic,dom,rec}]
                    [-t {chisq,fisher,logistic,linear}] [-c COVAR]
                    [-n COVARNAME] [-f FREQ] [-a {FDR,Bonferroni,Holm}]
-                   [-o OUT] [-V {False,True}] [-p PERM]
+                   [-o OUT] [-V {False,True}] [-p PERM] [-s SEED]
 
 HLA Association Analysis
 
@@ -50,7 +50,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
   -i FILE, --file FILE  input file
-  -d {2,4}, --digits {2,4}
+  -d {2,4,6}, --digits {2,4,6}
                         digits to test, default 4
   -m {allelic,dom,rec}, --model {allelic,dom,rec}
                         genetic model, default allelic
@@ -67,6 +67,7 @@ optional arguments:
   -V {False,True}, --print {False,True}
                         print output to screen
   -p PERM, --perm PERM  number of permutation
+  -s SEED, --seed SEED  random seed
 ```
 
 ### 1) Genotype Input (-i or --file)  
