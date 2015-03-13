@@ -108,10 +108,11 @@ Default value is *allelic*.
 ### 4) Methods for association test (-t or --test)
 
 ```
-chisq       Pearson chi-squared test (For disease traits)
-fisher      Fisher's exact test (For disease traits)
+chisq       Pearson chi-squared test (For disease traits, 2 x 2 coningency table)
+fisher      Fisher's exact test (For disease traits, 2 x 2 coningency table)
 logistic    logistic regression (For disease traits)
 linear      linear regression (For quantitative traits)
+raw         Pearson chi-squared test (For disease traits, 2 x m coningency table) 
 ```
 When linear or logistic regression was used, assume `A*01:01` is the test allele, then `A*01:01 A*01:01` is code as 2, `A*01:01 A*01:02` is code as 1, and `A*01:02 A*01:03` is code as 0.
 
