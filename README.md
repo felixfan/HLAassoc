@@ -190,7 +190,8 @@ A number used to initialize the basic random number generator. By default, the c
 Output contains several fields depend on which commands were used.  
 
 ```
-ID            Allele name
+Allele        Allele name
+Gene          Gene name
 A_case        Count of this allele in cases
 B_case        Count of other alleles in cases
 A_ctrl        Count of this allele in controls
