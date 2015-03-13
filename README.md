@@ -215,6 +215,28 @@ P_adj         Multiple testing adjusted p value
 P_perm        P-value for permutation test
 ```
 
+### 5.1 `--test chisq` or `--test fisher`
+
+For each allele, a 2 X 2 coningency table contains the count of this allele and the count of the other alleles in the same gene in cases and controls was created. The total number of test is the number of alleles have frequency in cases or controls higher the the threshold specified by option `--freq` or `-f`.
+
+The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`, `F_ctrl`, `Freq`, `OR`, `L95`, `U95`, `P_adj`.    
+
+The output of Pearson's chi-squared test also includes: `Chisq`, `DF`, `P_chisq`.   
+
+The output of Fisher's exact test also includes: `P_Fisher`    
+
+When `--perm` is used, another column `P_perm` is added to the output.  
+
+### 5.2 --test logistic or --test linear
+
+P_logistic    P-value for logistic regression
+P_linear      P-value for linear regression
+
+`beta`,
+
+### 5.3 --test raw
+
+
 ## 6. Usage
 
 ### 6.1) Disease trait (Case/Control Study)
