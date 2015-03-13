@@ -242,3 +242,63 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname,seed):
 		else:
 			permP[a] = 'NA'
 	return permP
+def rawPerm(infile, digit, perm, seed):
+	'''
+	permutation
+	input: genotype, digit to test, number of permutation to run.
+	output: dictionary, key:allele, value: p-value
+	'''
+	# original test
+	caseAlleles, ctrlAlleles, np, nc = HLAcount.allelicCount(infile,digit)
+	origP = {}
+	gene = {}  # get all genes name
+	for a in caseAlleles:
+		temp = a.split('*')
+		gene[temp[0]] = 1
+	for g in gene:
+		### counts
+		n1 = []
+		n2 = []
+		for a in caseAlleles:
+			if a in ctrlAlleles:
+				if a.startswith(g):
+					n1.append(caseAlleles[a])
+					n2.append(ctrlAlleles[a])
+		data = [n1, n2]
+		chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
+		if not isinstance(p, float):
+			origP[g] = 'NA'
+		else:
+			origP[g] = p
+	# premutation
+	random.seed(seed)
+	permP = {}
+	pf = perm / 10
+	for i in range(perm):
+		if i % pf == 1:
+			print 'permutation {}/{} ...'.format(i, perm)
+		caseAlleles, ctrlAlleles, np, nc = HLAcountPerm.allelicCount(infile,digit)
+		for g in gene:
+			### counts
+			n1 = []
+			n2 = []
+			for a in caseAlleles:
+				if a in ctrlAlleles:
+					if a.startswith(g):
+						n1.append(caseAlleles[a])
+						n2.append(ctrlAlleles[a])
+			data = [n1, n2]
+			chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
+
+			if g in origP:
+				if isinstance(p, float) and origP[g] != 'NA' and p < origP[g]:
+					if g in permP:
+						permP[g] += 1
+					else:
+						permP[g] = 1
+	for a in origP:
+		if a in permP:
+			permP[a] = 1.0 * (permP[a] + 1) / (perm + 1)
+		else:
+			permP[a] = 'NA'
+	return permP

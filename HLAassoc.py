@@ -5,13 +5,14 @@ import HLAtest
 import HLAregression
 import pAdjust
 import HLAperm
+import HLAcount
 
 parser = argparse.ArgumentParser(description='HLA Association Analysis', prog="HLAassoc.py")
-parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.3')
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.4')
 parser.add_argument('-i', '--file', help='input file', required=True, type=str)
 parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4,6])
 parser.add_argument('-m', '--model', help='genetic model, default allelic', default='allelic', type=str, choices=['allelic','dom','rec'])
-parser.add_argument('-t', '--test', help='statistical test method, default chisq', default='chisq', type=str, choices=['chisq','fisher','logistic','linear'])
+parser.add_argument('-t', '--test', help='statistical test method, default chisq', default='chisq', type=str, choices=['chisq','fisher','logistic','linear','raw'])
 parser.add_argument('-c', '--covar', help='covariants file', type=str)
 parser.add_argument('-n', '--covarname', help='select a particular subset of covariates', type=str)
 parser.add_argument('-f', '--freq', help='minimal frequency, default 0.05', default=0.05, type=float)
@@ -46,7 +47,7 @@ if 'perm' in args:
 
 #####################################################################
 print "@-------------------------------------------------------------@"
-print "|       HLAassoc       |     v 1.3     |     10 Mar 2015      |"
+print "|       HLAassoc       |     v 1.4     |     12 Mar 2015      |"
 print "|-------------------------------------------------------------|"
 print "|  (C) 2015 Felix Yanhui Fan, GNU General Public License, v2  |"
 print "|-------------------------------------------------------------|"
@@ -59,13 +60,14 @@ print "\t--digits", DIGIT
 print "\t--test", TEST
 if TEST == 'chisq' or TEST == 'fisher':
 	print "\t--model", MODEL
-else:
+elif TEST == 'logistic' or 'linear':
 	if COVFILE:
 		print "\t--covar", COVFILE
 		if COVNAME:
 			print "\t--covarname", COVNAME
 print "\t--freq", FREQ
-print "\t--adjust", ADJUST
+if TEST != 'raw':
+	print "\t--adjust", ADJUST
 print "\t--print", PRINT
 if PERM:
 	print "\t--perm", PERM
@@ -78,6 +80,8 @@ print
 if PERM:
 	if TEST == 'chisq' or TEST == 'fisher':
 		permp = HLAperm.chisqFisherPerm(INFILE, DIGIT, MODEL, TEST, PERM, SEED)
+	elif TEST == 'raw':
+		permp = HLAperm.rawPerm(INFILE, DIGIT, PERM, SEED)
 	elif TEST == 'logistic' or TEST == 'linear':
 		if COVFILE:
 			permp = HLAperm.regressionCovPerm(INFILE, DIGIT, TEST, PERM, COVFILE, COVNAME, SEED)
@@ -86,13 +90,15 @@ if PERM:
 ### output header
 f = open(OUTFILE,"w")
 if TEST == 'chisq':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","Chisq","DF","P_chisq","OR","L95","U95","P_adj"]
+	header = ["Allele","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","Chisq","DF","P_chisq","OR","L95","U95","P_adj"]
 elif TEST == 'fisher':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_Fisher","OR","L95","U95","P_adj"]
+	header = ["Allele","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_Fisher","OR","L95","U95","P_adj"]
 elif TEST == 'logistic':
-	header = ["ID","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_logistic","OR","L95","U95","P_adj"]
+	header = ["Allele","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_logistic","OR","L95","U95","P_adj"]
 elif TEST == 'linear':
-	header = ["ID","Freq","P_linear","beta","L95","U95","P_adj"]
+	header = ["Allele","Freq","P_linear","beta","L95","U95","P_adj"]
+elif TEST == 'raw':
+	header = ["Gene","Chisq","DF","P_chisq"]
 if PERM:
 	header.append('P_perm')
 for h in header:
@@ -106,8 +112,12 @@ f.write('\n')
 ############################################################
 ### run association analysis
 rs = []
+rs2 ={}
 if TEST == 'chisq' or TEST == 'fisher':
 	rs = HLAtest.runAssoc(INFILE, DIGIT, FREQ, MODEL, TEST)
+elif TEST == 'raw':
+	caseAlleles, ctrlAlleles, np, nc = HLAcount.allelicCount(INFILE, DIGIT)
+	rs2 = HLAtest.assocADRChiFisher2(caseAlleles, ctrlAlleles, np, nc, FREQ, TEST)
 elif TEST == 'logistic' or TEST == 'linear':
 	if COVFILE:
 		if TEST == 'logistic':
@@ -140,57 +150,88 @@ elif TEST == 'linear':
 	pp = 2
 else:
 	pp = 8
-
-for r in rs:                        ### GENE BY GENE
-	keys = r.keys()
-	keys = sorted(keys)
-	ps = []
-	### get p values for a group
-	for key in keys:
-		words = r[key].split()
-		if words[pp] != 'NA':
-			ps.append(float(words[pp]))
-	### adjust p
-	cp = pAdjust.adjustP(ps,ADJUST)
-	### output
-	for key in keys:
+if TEST != 'raw':
+	for r in rs:                        ### GENE BY GENE
+		keys = r.keys()
+		keys = sorted(keys)
+		ps = []
+		### get p values for a group
+		for key in keys:
 			words = r[key].split()
-			for word in words: # test results
-				if PRINT:
-					print "%12s" % word,
-				f.write("%12s" % word,)
-			### adjust
 			if words[pp] != 'NA':
-				tmp = cp.pop(0)
-				if PRINT:
-					print "%12s" % str(round(tmp,6)),
-				f.write('%12s' % str(round(tmp,6)))
-			else:
-				if PRINT:
-					print "%12s" % ('NA'),
-				f.write('%12s' % ('NA'))
-			### perm
-			if PERM:
-				if key in permp:
+				ps.append(float(words[pp]))
+		### adjust p
+		cp = pAdjust.adjustP(ps,ADJUST)
+		### output
+		for key in keys:
+				words = r[key].split()
+				for word in words: # test results
 					if PRINT:
-						if permp[key] != 'NA':
-							print "%12s" % str(round(permp[key],6)),
-						else:
-							print "%12s" % 'NA',
-					if permp[key] != 'NA':
-						f.write('%12s' % str(round(permp[key],6)))
-					else:
-						f.write('%12s' % 'NA')
+						print "%12s" % word,
+					f.write("%12s" % word,)
+				### adjust
+				if words[pp] != 'NA':
+					tmp = cp.pop(0)
+					if PRINT:
+						print "%12s" % str(round(tmp,6)),
+					f.write('%12s' % str(round(tmp,6)))
 				else:
 					if PRINT:
-						print "%12s" % 'NA',
-					f.write('%12s' % 'NA')
-			# new line
-			if PRINT:
-				print
-			f.write('\n')
-f.close()
+						print "%12s" % ('NA'),
+					f.write('%12s' % ('NA'))
+				### perm
+				if PERM:
+					if key in permp:
+						if PRINT:
+							if permp[key] != 'NA':
+								print "%12s" % str(round(permp[key],6)),
+							else:
+								print "%12s" % 'NA',
+						if permp[key] != 'NA':
+							f.write('%12s' % str(round(permp[key],6)))
+						else:
+							f.write('%12s' % 'NA')
+					else:
+						if PRINT:
+							print "%12s" % 'NA',
+						f.write('%12s' % 'NA')
+				# new line
+				if PRINT:
+					print
+				f.write('\n')
+	f.close()
+else: # raw test
+	keys = sorted(rs2.keys())
+	for k in keys:
+		if PRINT:
+			print "%12s" % k,
+		f.write('%12s' % k)
 
+		fs = rs2[k].split()
+		for ff in fs:
+			if PRINT:
+				print "%12s" % ff,
+			f.write('%12s' % ff)
+		### perm
+		if PERM:
+			if k in permp:
+				if PRINT:
+					if permp[k] != 'NA':
+						print "%12s" % str(round(permp[k],6)),
+					else:
+						print "%12s" % 'NA',
+				if permp[k] != 'NA':
+					f.write('%12s' % str(round(permp[k],6)))
+				else:
+					f.write('%12s' % 'NA')
+			else:
+				if PRINT:
+					print "%12s" % 'NA',
+				f.write('%12s' % 'NA')
+
+		if PRINT:
+			print
+		f.write('\n')
 ##############################################################
 import time
 print "Finished at ",

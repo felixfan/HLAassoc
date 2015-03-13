@@ -88,3 +88,61 @@ def runAssoc(infile, digit, freq, model, test):
 		result.append(assocA)
 			
 	return result
+
+def assocADRChiFisher2(caseAlleles, ctrlAlleles, np, nc, freq, test):
+	'''
+	Association Analysis for Allelic, Dominant or Recessive Model (2 x m)
+	Pearson's Chi-squared test or Fisher exact test
+	return allele counts, frequency, [chi-square, df,] p, and OR
+	'''
+	assoc = {}
+	### genes
+	gene = {}  # get all genes name
+	for a in caseAlleles:
+		temp = a.split('*')
+		gene[temp[0]] = 1
+	for g in gene:
+		### counts
+		case = {}
+		ctrl = {}
+		for a in caseAlleles:
+			if a.startswith(g):
+				case[a] = caseAlleles[a]
+		for a in ctrlAlleles:
+			if a.startswith(g):
+				ctrl[a] = ctrlAlleles[a]
+		### freq
+		freqCase = {}
+		freqCtrl = {}
+		freqAll = {}
+		for a in case:
+			freqCase[a] = 1.0 * case[a] / np[g]
+		for a in ctrl:
+			freqCtrl[a] = 1.0 * ctrl[a] / nc[g]
+			if a in case:
+				freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[g] + nc[g])
+		### assoc
+		n1 = []
+		n2 = []
+		for a in case:
+			if a in ctrl:
+				if freqCase[a] > freq or freqCtrl[a] > freq:
+					n1.append(case[a])
+					n2.append(ctrl[a])
+		data = [n1, n2]
+		if test == "raw":
+			chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
+		if not isinstance(chi2, float):
+			s1 = 'NA'
+		else:
+			s1 = str(round(chi2,4))
+		if not isinstance(dof, int):
+			s2 = '\t' + 'NA'
+		else:
+			s2 = '\t' + str(dof)
+		if not isinstance(p, float):
+			s3 = '\t' + 'NA'
+		else:
+			s3 = '\t' + str(round(p,6))
+		assoc[g] = s1 + s2 + s3
+	return assoc
