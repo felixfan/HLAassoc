@@ -41,7 +41,7 @@ The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/arc
 ```
 python HLAassoc.py -h
 usage: HLAassoc.py [-h] [-v] -i FILE [-d {2,4,6}] [-m {allelic,dom,rec}]
-                   [-t {chisq,fisher,logistic,linear}] [-c COVAR]
+                   [-t {chisq,fisher,logistic,linear,raw}] [-c COVAR]
                    [-n COVARNAME] [-f FREQ] [-a {FDR,Bonferroni,Holm}]
                    [-o OUT] [-V {False,True}] [-p PERM] [-s SEED]
 
@@ -55,7 +55,7 @@ optional arguments:
                         digits to test, default 4
   -m {allelic,dom,rec}, --model {allelic,dom,rec}
                         genetic model, default allelic
-  -t {chisq,fisher,logistic,linear}, --test {chisq,fisher,logistic,linear}
+  -t {chisq,fisher,logistic,linear,raw}, --test {chisq,fisher,logistic,linear,raw}
                         statistical test method, default chisq
   -c COVAR, --covar COVAR
                         covariants file
@@ -68,7 +68,6 @@ optional arguments:
   -V {False,True}, --print {False,True}
                         print output to screen
   -p PERM, --perm PERM  number of permutation
-  -s SEED, --seed SEED  random seed
 ```
 
 ### 1) Genotype Input (-i or --file)  
