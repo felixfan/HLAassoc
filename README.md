@@ -1,6 +1,7 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
 ## News
+* v1.4 (12 Mar 2015): add raw test
 * v1.3 (10 Mar 2015): add allele frequency to output
 * v1.2 (9 Mar 2015): permutation test was added
 * v1.1 (16 Feb 2015): linear and logistic regression were added
@@ -33,7 +34,7 @@ sudo pip install statsmodels
 
 - **Download HLAassoc**   
 
-The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.3.tar.gz).
+The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.4.tar.gz).
 
 ## Optionals
 
