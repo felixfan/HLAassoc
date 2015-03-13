@@ -229,10 +229,15 @@ When `--perm` is used, another column `P_perm` is added to the output.
 
 ### 5.2 --test logistic or --test linear
 
-P_logistic    P-value for logistic regression
-P_linear      P-value for linear regression
+For each allele, one individual will be coded as 2, 1, 0, if the individual has two copies, one copy, and zero copy of this allele, respectively. The total number of test is the number of alleles have frequency in cases or controls higher the the threshold specified by option `--freq` or `-f`.
 
-`beta`,
+The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`, `F_ctrl`, `Freq`, `L95`, `U95`, `P_adj`. 
+
+The output of logistic regression also includes: `OR`, and `P_logistic`.   
+
+The output of linear regression also includes: `beta` and `P_linear`.
+
+When `--perm` is used, another column `P_perm` is added to the output. 
 
 ### 5.3 --test raw
 
