@@ -215,4 +215,7 @@ P_perm        P-value for permutation test
 
 ## Usage
 
+### Disease trait (Case/Control Study)
+
+### Quantitative trait
 
