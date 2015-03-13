@@ -1,22 +1,22 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
-## News
+## 0. News
 * v1.4 (12 Mar 2015): add raw test
 * v1.3 (10 Mar 2015): add allele frequency to output
 * v1.2 (9 Mar 2015): permutation test was added
 * v1.1 (16 Feb 2015): linear and logistic regression were added
 * v1.0 (23 Jan 2015): initial release.
 
-## Introduction
+## 1. Introduction
 
-## Requirement
+## 2. Requirement
 
 * [Python 2.7](https://www.python.org/)
 * [pandas](http://pandas.pydata.org/)
 * [SciPy](http://www.scipy.org/)
 * [StatsModels](http://statsmodels.sourceforge.net/)
 
-## Installation
+## 3. Installation
 
 - **Install Python 2.7**   
 
@@ -36,7 +36,7 @@ sudo pip install statsmodels
 
 The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.4.tar.gz).
 
-## Optionals
+## 4. Optionals
 
 ```
 python HLAassoc.py -h
@@ -70,7 +70,7 @@ optional arguments:
   -p PERM, --perm PERM  number of permutation
 ```
 
-### 1) Genotype Input (-i or --file)  
+### 4.1) Genotype Input (-i or --file)  
 
 The input file is a white-space (space or tab) delimited file. The first two columns are mandatory: Individual ID and Phenotype. The Individual IDs are alphanumeric and should uniquely identify a person. The second column is phenotype which can be either a quantitative trait or an affection status. Affection status should be coded as 1 and 2 for unaffected and affected, respectively.
 
@@ -87,11 +87,11 @@ No header row should be given. For example, here are two individuals typed for 6
 
 **Note:** Individual `0002` does not have genotype for HLA-DQA1 (two `NA`). All alleles have six digits resolution except that one allele of HLA-C of individual `0002` only has four digits resolution. It is fine if we only want to test association at two or four digits resolution.  
 
-### 2) Digits resolution (-d or --digits)   
+### 4.2) Digits resolution (-d or --digits)   
 
 Test of association using two digits, four digits or six digits. When two was used, alleles such as `A*02:01` and `A*02:06` will be combined as `A*02`. Default value is 4.
 
-### 3) Genetic model to test (-m or --model)   
+### 4.3) Genetic model to test (-m or --model)   
 
 When Pearson chi-squared test or Fisher's exact test was used, three genetic models can be specified.   
 
@@ -105,7 +105,7 @@ Default value is *allelic*.
 
 **Note:** `--model` only effect when `--test chisq` or `--test fisher` is specified.
 
-### 4) Methods for association test (-t or --test)
+### 4.4) Methods for association test (-t or --test)
 
 ```
 chisq       Pearson chi-squared test (For disease traits, 2 x 2 coningency table)
@@ -118,7 +118,7 @@ When linear or logistic regression was used, assume `A*01:01` is the test allele
 
 Default value is *chisq*.
 
-### 5) Covariates file (-c or --covar)
+### 4.5) Covariates file (-c or --covar)
 
 One or more covariates can be included in linear and logistic regression.
 
@@ -138,7 +138,7 @@ IID  age sex bmi
 
 **Note:** The order of individuals in covariates file does not have to be the same as the genotype input file. The number of individuals in covariates file also does not have to be the same as the genotype input file. Only the common individuals of both files were included in the analysis.
 
-### 6) Covariates name (-n or --covarname)
+### 4.6) Covariates name (-n or --covarname)
 
 To select a particular subset of covariates, use `--covarname covarnames` command.
 
@@ -155,11 +155,11 @@ For example,
 
 **Note:** if `--covarname covarnames` command is not specified, all covariates in cov.txt will be used.
 
-### 7) Minimal allele/allele group frequency (-f or --freq)
+### 4.7) Minimal allele/allele group frequency (-f or --freq)
 
 A value between 0 and 1. Only alleles/allele groups have frequency higher than this threshold will be included in association analysis. Default value is 0.05. For quantitative traits, allele frequency in the whole dataset is used to compare with the threshold. For disease traits, one allele will be included if its frequency in case or control is higher than the threshold.
 
-### 8) Adjustment for multiple testing (-a or --adjust)
+### 4.8) Adjustment for multiple testing (-a or --adjust)
 
 ```
 Bonferroni         Bonferroni single-step adjusted p-values
@@ -167,25 +167,25 @@ Holm               Holm (1979) step-down adjusted p-values
 FDR                Benjamini & Hochberg (1995) step-up FDR control
 ```
 
-### 9) Permutation (-p or --perm)
+### 4.9) Permutation (-p or --perm)
 
 Number of permutation will be performed.   
 
 For each permutation run, a simulated dataset is constructed from the original dataset by randomizing the assignment of phenotype status among individuals. The same individuals are used, maintaining the same LD structure and the original case/control ratio. 
 
-### 10) Output file name (-o or --out)
+### 4.10) Output file name (-o or --out)
 
 Default value is `hlaassoc.txt`.
 
-### 11) Print output to screen (-V or --print)
+### 4.11) Print output to screen (-V or --print)
 
 Default value is `False`.
 
-### 12) Random seed (-s or --seed)
+### 4.12) Random seed (-s or --seed)
 
 A number used to initialize the basic random number generator. By default, the current system time is used. 
 
-## Output
+## 5. Output
 
 Output contains several fields depend on which commands were used.  
 
@@ -213,9 +213,9 @@ P_adj         Multiple testing adjusted p value
 P_perm        P-value for permutation test
 ```
 
-## Usage
+## 6. Usage
 
-### Disease trait (Case/Control Study)
+### 6.1) Disease trait (Case/Control Study)
 
-### Quantitative trait
+### 6.2) Quantitative trait
 
