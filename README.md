@@ -252,6 +252,18 @@ python HLAassoc.py -i input0.txt
 python HLAassoc.py --file input0.txt --digits 4 --test chisq --model allelic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
 ```
 
+1000 permutation test:   
+```
+python HLAassoc.py --file input0.txt --perm 1000
+```
+
+Test all alleles and perform 1000 permutation test:   
+```
+python HLAassoc.py --file input0.txt --perm 1000 --freq 0
+```
+
+**Note:** Order of options do **NOT** matter.
+
 * Fisher's exact test 
 
 Fisher's exact test shares the same parameters with Pearson's chi-squared test. The following three commands are equivalent.   
