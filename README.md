@@ -247,10 +247,15 @@ python HLAassoc.py -i input0.txt
 python HLAassoc.py --file input0.txt --digits 4 --test chisq --model allelic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
 ```
 
-```
-```
+* Fisher's exact test 
 
-* Fisher's exact test   
+Fisher's exact test shares the same parameters with Pearson's chi-squared test. The following three commands are equivalent.   
+
+```
+python HLAassoc.py --file input0.txt --test fisher
+python HLAassoc.py -i input0.txt --test fisher
+python HLAassoc.py --file input0.txt --digits 4 --test fisher --model allelic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
 
 * Logistic regression   
 
