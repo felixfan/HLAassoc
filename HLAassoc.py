@@ -18,7 +18,7 @@ parser.add_argument('-n', '--covarname', help='select a particular subset of cov
 parser.add_argument('-f', '--freq', help='minimal frequency, default 0.05', default=0.05, type=float)
 parser.add_argument('-a', '--adjust', help='p value correction, default FDR', default='FDR', type=str,choices=['FDR','Bonferroni','Holm'])
 parser.add_argument('-o', '--out', help='output file', default='hlaassoc.txt')
-parser.add_argument('-V', '--print', help='print output to screen', type=bool, default=False, choices=[False, True])
+parser.add_argument('-V', '--print', help='print output to screen', type=str, default='False', choices=['False', 'True'])
 parser.add_argument('-p', '--perm', help='number of permutation', type=int)
 parser.add_argument('-s', '--seed', help='random seed', type=int)
 
@@ -31,7 +31,7 @@ DIGIT = args['digits']
 MODEL = args['model']
 ADJUST = args['adjust']
 TEST = args['test']
-PRINT = args['print']
+PRINT = (args['print'] == 'True')
 SEED = args['seed']
 
 COVFILE = False
