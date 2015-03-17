@@ -229,6 +229,9 @@ The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`,
 
 ### 5.3 --test raw
 
+Raw test performs a Pearson's chi-squared test on the 2 x m contingency tables for each gene. `m` is the number of alleles have frequency in cases or controls higher the the threshold specified by option `--freq` or `-f`.    
+
+The output includes: `Gene`, `Chisq`, `DF`, `P_chisq`. When `--perm` is used, another column `P_perm` is added to the output.   
 
 ## 6. Usage
 
