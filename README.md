@@ -237,5 +237,24 @@ The output includes: `Gene`, `Chisq`, `DF`, `P_chisq`. When `--perm` is used, an
 
 ### 6.1) Disease trait (Case/Control Study)
 
+* Pearson's chi-squared test   
+
+The following three commands are equivalent. They perform the Pearson's chi-squared test for each allele that has frequency higher than 0.05 in cases or controls at 4 digits resolution. FDR was used to adjust the p value for multiple testing. Do not write the output to the screen. Save the output to `hlaassoc.txt`.   
+
+```
+python HLAassoc.py --file input0.txt
+python HLAassoc.py -i input0.txt
+python HLAassoc.py --file input0.txt --digits 4 --test chisq --model allelic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
+
+```
+```
+
+* Fisher's exact test   
+
+* Logistic regression   
+
+* Raw test   
+
 ### 6.2) Quantitative trait
 
