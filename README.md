@@ -253,13 +253,24 @@ Fisher's exact test shares the same parameters with Pearson's chi-squared test. 
 
 ```
 python HLAassoc.py --file input0.txt --test fisher
-python HLAassoc.py -i input0.txt --test fisher
+python HLAassoc.py -i input0.txt -t fisher
 python HLAassoc.py --file input0.txt --digits 4 --test fisher --model allelic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
 ```
 
 * Logistic regression   
 
+```
+python HLAassoc.py -i input0.txt -t logistic
+python HLAassoc.py --file input0.txt --test logistic
+python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
+
 * Raw test   
 
 ### 6.2) Quantitative trait
 
+```
+python HLAassoc.py -i input0.txt -t logistic
+python HLAassoc.py --file input0.txt --test logistic
+python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
