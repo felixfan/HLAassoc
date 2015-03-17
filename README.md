@@ -235,6 +235,11 @@ The output includes: `Gene`, `Chisq`, `DF`, `P_chisq`. When `--perm` is used, an
 
 ## 6. Usage
 
+```
+python HLAassoc.py -h
+python HLAassoc.py --help
+```
+
 ### 6.1) Disease trait (Case/Control Study)
 
 * Pearson's chi-squared test   
