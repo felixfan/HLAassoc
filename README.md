@@ -34,7 +34,7 @@ sudo pip install statsmodels
 
 - **Download HLAassoc**   
 
-The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.4.tar.gz).
+The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.4.1.tar.gz).
 
 ## 4. Optionals
 
