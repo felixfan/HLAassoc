@@ -219,25 +219,13 @@ P_perm        P-value for permutation test
 
 For each allele, a 2 X 2 coningency table contains the count of this allele and the count of the other alleles in the same gene in cases and controls was created. The total number of test is the number of alleles have frequency in cases or controls higher the the threshold specified by option `--freq` or `-f`.
 
-The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`, `F_ctrl`, `Freq`, `OR`, `L95`, `U95`, `P_adj`.    
-
-The output of Pearson's chi-squared test also includes: `Chisq`, `DF`, `P_chisq`.   
-
-The output of Fisher's exact test also includes: `P_Fisher`    
-
-When `--perm` is used, another column `P_perm` is added to the output.  
+The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`, `F_ctrl`, `Freq`, `OR`, `L95`, `U95`, `P_adj`. The output of Pearson's chi-squared test also includes: `Chisq`, `DF`, `P_chisq`. The output of Fisher's exact test also includes: `P_Fisher`. When `--perm` is used, another column `P_perm` is added to the output.  
 
 ### 5.2 --test logistic or --test linear
 
 For each allele, one individual will be coded as 2, 1, 0, if the individual has two copies, one copy, and zero copy of this allele, respectively. The total number of test is the number of alleles have frequency in cases or controls higher the the threshold specified by option `--freq` or `-f`.
 
-The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`, `F_ctrl`, `Freq`, `L95`, `U95`, `P_adj`. 
-
-The output of logistic regression also includes: `OR`, and `P_logistic`.   
-
-The output of linear regression also includes: `beta` and `P_linear`.
-
-When `--perm` is used, another column `P_perm` is added to the output. 
+The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`, `F_ctrl`, `Freq`, `L95`, `U95`, `P_adj`. The output of logistic regression also includes: `OR`, and `P_logistic`. The output of linear regression also includes: `beta` and `P_linear`. When `--perm` is used, another column `P_perm` is added to the output. 
 
 ### 5.3 --test raw
 
