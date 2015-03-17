@@ -267,6 +267,12 @@ python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --ad
 
 * Raw test   
 
+```
+python HLAassoc.py -i input0.txt -t raw
+python HLAassoc.py --file input0.txt --test raw
+python HLAassoc.py --file input0.txt --digits 4 --test raw --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
+
 ### 6.2) Quantitative trait
 
 * Linear regression   
