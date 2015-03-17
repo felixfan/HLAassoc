@@ -253,18 +253,20 @@ python HLAassoc.py --file input0.txt --digits 4 --test chisq --model allelic --f
 ```
 
 1000 permutation test:   
+
 ```
 python HLAassoc.py --file input0.txt --perm 1000
 ```
 
 Test all alleles and perform 1000 permutation test:   
+
 ```
 python HLAassoc.py --file input0.txt --perm 1000 --freq 0
 ```
 
-**Note:** Order of options do **NOT** matter.
+**Note:** Order of options do **NOT** matter.    
 
-* Fisher's exact test 
+* Fisher's exact test     
 
 Fisher's exact test shares the same parameters with Pearson's chi-squared test. The following three commands are equivalent.   
 
@@ -280,6 +282,13 @@ python HLAassoc.py --file input0.txt --digits 4 --test fisher --model allelic --
 python HLAassoc.py -i input0.txt -t logistic
 python HLAassoc.py --file input0.txt --test logistic
 python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
+
+Logistic regression with covariants: the first command uses all variants in `covar.txt` as covariants, the second command uses `age` and `bmi` as covariants.
+
+```
+python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt --covar covar.txt
+python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt --covar covar.txt --covarname age,bmi
 ```
 
 * Raw test   
@@ -298,4 +307,10 @@ python HLAassoc.py --file input0.txt --digits 4 --test raw --freq 0.05 --adjust 
 python HLAassoc.py -i input1.txt -t linear
 python HLAassoc.py --file input1.txt --test linear
 python HLAassoc.py --file input1.txt --digits 4 --test linear --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+```
+
+Linear regression with covariants: the first command uses all variants in `covar.txt` as covariants, the second command uses `age` and `bmi` as covariants.
+```
+python HLAassoc.py --file input1.txt --digits 4 --test linear --freq 0.05 --adjust FDR --print False --out hlaassoc.txt --covar covar.txt
+python HLAassoc.py --file input1.txt --digits 4 --test linear --freq 0.05 --adjust FDR --print False --out hlaassoc.txt --covar covar.txt --covarname age,bmi
 ```
