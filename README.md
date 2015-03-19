@@ -319,3 +319,11 @@ Linear regression with covariants: the first command uses all variants in `covar
 python HLAassoc.py --file input1.txt --digits 4 --test linear --freq 0.05 --adjust FDR --print False --out hlaassoc.txt --covar covar.txt
 python HLAassoc.py --file input1.txt --digits 4 --test linear --freq 0.05 --adjust FDR --print False --out hlaassoc.txt --covar covar.txt --covarname age,bmi
 ```
+
+### 7. Gallery
+
+![](./fig/main.png)
+![](./fig/vgeno.png)
+![](./fig/vcov.png)
+![](./fig/vresult.png)
+
