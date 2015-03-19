@@ -28,6 +28,8 @@ If you don't already have Python installed. You can follow this [guild](https://
 
 - 3.2 **Install Python modules**   
 
+Please follow this [guild](http://pyqt.sourceforge.net/Docs/PyQt4/installation.html) to install PyQt4, if you want to use the GUI.   
+
 ```
 sudo pip install pandas
 sudo pip install git+http://github.com/scipy/scipy/
