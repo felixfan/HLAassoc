@@ -242,6 +242,7 @@ The output includes: `Gene`, `Chisq`, `DF`, `P_chisq`. When `--perm` is used, an
 ```
 python HLAassoc.py -h
 python HLAassoc.py --help
+python HLAassocGUI.py       (start the GUI)
 ```
 
 ### 6.1) Disease trait (Case/Control Study)
