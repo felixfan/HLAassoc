@@ -20,11 +20,13 @@
 
 ## 3. Installation
 
-- **Install Python 2.7**   
+**Note:** There are several free scientific python distributions such as [Anaconda](http://continuum.io/downloads) and [Enthought Canopy](https://www.enthought.com/products/canopy/) which are already integrated the core scientific analytic and scientific Python packages such as `SciPy`, `pandas`, `StatsModels` and `PyQt4`. To make your life easier, I suggest you install [Anaconda](http://continuum.io/downloads) or [Enthought Canopy](https://www.enthought.com/products/canopy/)  and then you do not need to install other modules manually. If you have installed [Anaconda](http://continuum.io/downloads) or [Enthought Canopy](https://www.enthought.com/products/canopy/), please skip section `3.1` and `3.2`.
+
+- 3.1 **Install Python 2.7**   
 
 If you don't already have Python installed. You can follow this [guild](https://wiki.python.org/moin/BeginnersGuide/Download) to install it.
 
-- **Install Python modules**   
+- 3.2 **Install Python modules**   
 
 ```
 sudo pip install pandas
@@ -32,9 +34,7 @@ sudo pip install git+http://github.com/scipy/scipy/
 sudo pip install statsmodels
 ```
 
-**Note:** There are several free scientific python distributions such as [Anaconda](http://continuum.io/downloads) and [Enthought Canopy](https://www.enthought.com/products/canopy/) which are already integrated the core scientific analytic and scientific Python packages such as `SciPy`, `pandas` and `StatsModels`.
-
-- **Download HLAassoc**   
+- 3.3 **Download HLAassoc**   
 
 The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/archive/v1.5.tar.gz).
 
