@@ -16,6 +16,7 @@
 * [pandas](http://pandas.pydata.org/)
 * [SciPy](http://www.scipy.org/)
 * [StatsModels](http://statsmodels.sourceforge.net/)
+* [PyQt4](https://wiki.python.org/moin/PyQt4) (If you want to use the GUI)
 
 ## 3. Installation
 
