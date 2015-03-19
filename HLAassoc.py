@@ -8,7 +8,7 @@ import HLAperm
 import HLAcount
 
 parser = argparse.ArgumentParser(description='HLA Association Analysis', prog="HLAassoc.py")
-parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.4')
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.5')
 parser.add_argument('-i', '--file', help='input file', required=True, type=str)
 parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4,6])
 parser.add_argument('-m', '--model', help='genetic model, default allelic', default='allelic', type=str, choices=['allelic','dom','rec'])
@@ -47,7 +47,7 @@ if 'perm' in args:
 
 #####################################################################
 print "@-------------------------------------------------------------@"
-print "|       HLAassoc       |     v 1.4     |     12 Mar 2015      |"
+print "|       HLAassoc       |     v 1.5     |     19 Mar 2015      |"
 print "|-------------------------------------------------------------|"
 print "|  (C) 2015 Felix Yanhui Fan, GNU General Public License, v2  |"
 print "|-------------------------------------------------------------|"

@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
+import pandas as pd
 import sys
 import os
 
 class HLAassocWin(QtGui.QWidget):
 	def __init__(self):
 		QtGui.QMainWindow.__init__(self)
-		width = 700
-		height =500
-		self.setFixedSize(width, height)
+		self.width = 700
+		self.height =500
+		self.setFixedSize(self.width, self.height)
 		self.move(200, 200)
 		self.setWindowTitle('HLAassoc')
 		#######################################################
@@ -103,6 +104,7 @@ class HLAassocWin(QtGui.QWidget):
 		self.vEdit.setEnabled(False)
 		self.vButton.setEnabled(False)
 		self.vvButton.setEnabled(False)
+		self.gvButton.setEnabled(False)
 		self.frqEdit.setText('0.05')
 		self.covLab.setEnabled(False)
 		self.covEdit.setEnabled(False)
@@ -113,6 +115,8 @@ class HLAassocWin(QtGui.QWidget):
 		self.vButton.clicked.connect(self.vButtonClicked)
 		self.oButton.clicked.connect(self.oButtonClicked)
 		self.runButton.clicked.connect(self.runButtonClicked)
+		self.gvButton.clicked.connect(self.gvButtonClicked)
+		self.vvButton.clicked.connect(self.vvButtonClicked)
 		#######################################################
 		self.setLayout(self.grid)
 		#######################################################
@@ -121,7 +125,6 @@ class HLAassocWin(QtGui.QWidget):
 			self.vLab.setEnabled(True)
 			self.vEdit.setEnabled(True)
 			self.vButton.setEnabled(True)
-			self.vvButton.setEnabled(True)
 			self.covLab.setEnabled(True)
 			self.covEdit.setEnabled(True)
 			self.testCombo.clear()
@@ -156,7 +159,6 @@ class HLAassocWin(QtGui.QWidget):
 			self.vLab.setEnabled(True)
 			self.vEdit.setEnabled(True)
 			self.vButton.setEnabled(True)
-			self.vvButton.setEnabled(True)
 			self.covLab.setEnabled(True)
 			self.covEdit.setEnabled(True)
 		else:
@@ -174,12 +176,65 @@ class HLAassocWin(QtGui.QWidget):
 	def gButtonClicked(self):
 		self.gfile = QtGui.QFileDialog.getOpenFileName(self,'Open File', '.')
 		self.gEdit.setText(self.gfile)
+		if self.gfile:
+			self.gvButton.setEnabled(True)
 	def vButtonClicked(self):
 		self.covfile = QtGui.QFileDialog.getOpenFileName(self,'Open File', '.')
 		self.vEdit.setText(self.covfile)
+		if self.covfile:
+			self.vvButton.setEnabled(True)
 	def oButtonClicked(self):
 		self.outfile = QtGui.QFileDialog.getSaveFileName(self,'Open File', '.')
 		self.oEdit.setText(self.outfile)
+	def gvButtonClicked(self):
+		self.gdialog = QtGui.QDialog()
+		self.gdialog.resize(self.width, self.height)
+		self.gdialog.setWindowTitle("view of genotype data")
+		df  = pd.read_csv(str(self.gfile), delim_whitespace= True, index_col = None, header = None)
+		gdatatable = QtGui.QTableWidget(parent=self.gdialog)
+		gdatatable.setColumnCount(len(df.columns))
+		gdatatable.setRowCount(len(df.index))
+		labels = list(df.iloc[0])
+		labels = labels[2:]
+		lheader = ['IID', 'PHT']
+		lindex = 0
+		for label in labels:
+			temp = label.split('*')
+			tlabel = 'HLA-' + temp[0]
+			if lindex == 0:
+				tlabel += '-1'
+				lindex = 1
+			else:
+				tlabel += '-2'
+				lindex = 0
+			lheader.append(tlabel)
+		gdatatable.setHorizontalHeaderLabels(lheader)
+		for i in range(len(df.index)):
+			for j in range(len(df.columns)):
+				gdatatable.setItem(i,j,QtGui.QTableWidgetItem(str(df.iget_value(i, j))))
+		gdatatable.resizeColumnsToContents()
+		ghbox = QtGui.QHBoxLayout()
+		ghbox.addWidget(gdatatable)
+		self.gdialog.setLayout(ghbox)
+		self.gdialog.show()
+	def vvButtonClicked(self):
+		self.vdialog = QtGui.QDialog()
+		self.vdialog.resize(self.width, self.height)
+		self.vdialog.setWindowTitle("view of covariates data")
+		df  = pd.read_csv(str(self.covfile), delim_whitespace= True, index_col = None, header = 0)
+		vdatatable = QtGui.QTableWidget(parent=self.vdialog)
+		vdatatable.setColumnCount(len(df.columns))
+		vdatatable.setRowCount(len(df.index))
+		vdatatable.setHorizontalHeaderLabels(list(df.columns.values))
+		for i in range(len(df.index)):
+			for j in range(len(df.columns)):
+				vdatatable.setItem(i,j,QtGui.QTableWidgetItem(str(df.iget_value(i, j))))
+		vdatatable.resizeColumnsToContents()
+
+		vhbox = QtGui.QHBoxLayout()
+		vhbox.addWidget(vdatatable)
+		self.vdialog.setLayout(vhbox)
+		self.vdialog.show()
 	def runButtonClicked(self):
 		comm = 'python HLAassoc.py --file '
 		comm += str(self.gfile)
@@ -223,6 +278,23 @@ class HLAassocWin(QtGui.QWidget):
 		comm += ' --out '
 		comm += str(self.outfile)
 		os.system(comm)
+		# show results
+		self.odialog = QtGui.QDialog()
+		self.odialog.resize(self.width, self.height)
+		self.odialog.setWindowTitle("view of output")
+		df  = pd.read_csv(str(self.outfile), delim_whitespace= True, index_col = None, header = 0)
+		odatatable = QtGui.QTableWidget(parent=self.odialog)
+		odatatable.setColumnCount(len(df.columns))
+		odatatable.setRowCount(len(df.index))
+		odatatable.setHorizontalHeaderLabels(list(df.columns.values))
+		for i in range(len(df.index)):
+			for j in range(len(df.columns)):
+				odatatable.setItem(i,j,QtGui.QTableWidgetItem(str(df.iget_value(i, j))))
+		odatatable.resizeColumnsToContents()
+		ohbox = QtGui.QHBoxLayout()
+		ohbox.addWidget(odatatable)
+		self.odialog.setLayout(ohbox)
+		self.odialog.show()
 #####################################################
 
 if __name__ == '__main__':
