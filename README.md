@@ -263,10 +263,10 @@ python HLAassoc.py --file input0.txt --digits 4 --test chisq --model allelic --f
 python HLAassoc.py --file input0.txt --perm 1000
 ```
 
-Test all alleles and perform 1000 permutation test:   
+Test all alleles and perform 10000 permutation test (it takes about 7 minutes):   
 
 ```
-python HLAassoc.py --file input0.txt --perm 1000 --freq 0
+python HLAassoc.py --file input0.txt --perm 10000 --freq 0
 ```
 
 **Note:** Order of options do **NOT** matter.    
