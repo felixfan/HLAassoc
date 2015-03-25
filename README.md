@@ -11,6 +11,8 @@
 
 ## 1. Introduction
 
+HLAassoc provides several methods for association analysis between HLA alleles and diseases.  
+
 ## 2. Requirement
 
 * [Python 2.7](https://www.python.org/)
