@@ -313,6 +313,8 @@ python HLAassoc.py --file input0.txt --test raw
 python HLAassoc.py --file input0.txt --digits 4 --test raw --freq 0.05 --print False --out hlaassoc.txt
 ```
 
+**Note:** Raw test performs a Pearson's chi-squared test on the 2 x m contingency tables for each gene. `m` is the number of alleles in both cases and controls with frequency higher than the frequency threshold. Please be noted that when perform permutation test, the alleles used in the simulated data may different from that in the original data. For example, a rare allele can be in both cases and controls in the original data, but only found in cases or controls in a simulated data. When this is the situation, the permutation p value is meaningless. 
+
 * Score test   
 
 ```
@@ -320,6 +322,8 @@ python HLAassoc.py -i input0.txt -t score
 python HLAassoc.py --file input0.txt --test score
 python HLAassoc.py --file input0.txt --digits 4 --test score --freq 0.05 --print False --out hlaassoc.txt
 ```
+
+**Note:** The permutation p value is also meaningless when alleles used in the original data and simulated data are different.
 
 ### 6.2) Quantitative trait
 
