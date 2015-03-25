@@ -89,11 +89,11 @@ def runAssoc(infile, digit, freq, model, test):
 			
 	return result
 
-def assocADRChiFisher2(caseAlleles, ctrlAlleles, np, nc, freq, test):
+def assocRaw(caseAlleles, ctrlAlleles, np, nc, freq, test):
 	'''
-	Association Analysis for Allelic, Dominant or Recessive Model (2 x m)
-	Pearson's Chi-squared test or Fisher exact test
-	return allele counts, frequency, [chi-square, df,] p, and OR
+	Association Analysis (2 x m)
+	Pearson's Chi-squared test
+	return chi-square, df, p
 	'''
 	assoc = {}
 	### genes
@@ -145,4 +145,50 @@ def assocADRChiFisher2(caseAlleles, ctrlAlleles, np, nc, freq, test):
 		else:
 			s3 = '\t' + str(round(p,6))
 		assoc[g] = s1 + s2 + s3
+	return assoc
+def assocScoreU(caseAlleles, ctrlAlleles, np, nc, freq, test):
+	'''
+	Association Analysis (2 x m)
+	Score test
+	return score test U
+	'''
+	assoc = {}
+	### genes
+	gene = {}  # get all genes name
+	for a in caseAlleles:
+		temp = a.split('*')
+		gene[temp[0]] = 1
+	for g in gene:
+		### counts
+		case = {}
+		ctrl = {}
+		for a in caseAlleles:
+			if a.startswith(g):
+				case[a] = caseAlleles[a]
+		for a in ctrlAlleles:
+			if a.startswith(g):
+				ctrl[a] = ctrlAlleles[a]
+		### freq
+		freqCase = {}
+		freqCtrl = {}
+		freqAll = {}
+		n1 = 0
+		n2 = 0
+		for a in case:
+			freqCase[a] = 1.0 * case[a] / np[g]
+		for a in ctrl:
+			freqCtrl[a] = 1.0 * ctrl[a] / nc[g]
+			if a in case:
+				freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[g] + nc[g])
+		### score test U
+		n1 = np[g]
+		u = 0
+		for a in freqAll:
+			if freqCase[a] > freq or freqCtrl[a] > freq:
+				u = u + (case[a] - n1 * freqAll[a]) ** 2 / freqAll[a] - (case[a] - n1 * freqAll[a]) / freqAll[a]
+		if not isinstance(u, float):
+			s1 = 'NA'
+		else:
+			s1 = str(round(u,4))
+		assoc[g] = s1
 	return assoc

@@ -242,11 +242,11 @@ def regressionCovPerm(infile, digits, method, perm, covfile, covname,seed):
 		else:
 			permP[a] = 'NA'
 	return permP
-def rawPerm(infile, digit, perm, seed):
+def rawPerm(infile, digit, perm, seed, freq):
 	'''
 	permutation
 	input: genotype, digit to test, number of permutation to run.
-	output: dictionary, key:allele, value: p-value
+	output: dictionary, key:gene, value: p-value
 	'''
 	# original test
 	caseAlleles, ctrlAlleles, np, nc = HLAcount.allelicCount(infile,digit)
@@ -257,13 +257,32 @@ def rawPerm(infile, digit, perm, seed):
 		gene[temp[0]] = 1
 	for g in gene:
 		### counts
+		case = {}
+		ctrl = {}
+		for a in caseAlleles:
+			if a.startswith(g):
+				case[a] = caseAlleles[a]
+		for a in ctrlAlleles:
+			if a.startswith(g):
+				ctrl[a] = ctrlAlleles[a]
+		### freq
+		freqCase = {}
+		freqCtrl = {}
+		freqAll = {}
+		for a in case:
+			freqCase[a] = 1.0 * case[a] / np[g]
+		for a in ctrl:
+			freqCtrl[a] = 1.0 * ctrl[a] / nc[g]
+			if a in case:
+				freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[g] + nc[g])
+		### counts
 		n1 = []
 		n2 = []
-		for a in caseAlleles:
-			if a in ctrlAlleles:
-				if a.startswith(g):
-					n1.append(caseAlleles[a])
-					n2.append(ctrlAlleles[a])
+		for a in case:
+			if a in ctrl:
+				if freqCase[a] > freq or freqCtrl[a] > freq:
+					n1.append(case[a])
+					n2.append(ctrl[a])
 		data = [n1, n2]
 		chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
 		if not isinstance(p, float):
@@ -280,18 +299,133 @@ def rawPerm(infile, digit, perm, seed):
 		caseAlleles, ctrlAlleles, np, nc = HLAcountPerm.allelicCount(infile,digit)
 		for g in gene:
 			### counts
+			case = {}
+			ctrl = {}
+			for a in caseAlleles:
+				if a.startswith(g):
+					case[a] = caseAlleles[a]
+			for a in ctrlAlleles:
+				if a.startswith(g):
+					ctrl[a] = ctrlAlleles[a]
+			### freq
+			freqCase = {}
+			freqCtrl = {}
+			freqAll = {}
+			for a in case:
+				freqCase[a] = 1.0 * case[a] / np[g]
+			for a in ctrl:
+				freqCtrl[a] = 1.0 * ctrl[a] / nc[g]
+				if a in case:
+					freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[g] + nc[g])
+			### counts
 			n1 = []
 			n2 = []
-			for a in caseAlleles:
-				if a in ctrlAlleles:
-					if a.startswith(g):
-						n1.append(caseAlleles[a])
-						n2.append(ctrlAlleles[a])
+			for a in case:
+				if a in ctrl:
+					if freqCase[a] > freq or freqCtrl[a] > freq:
+						n1.append(case[a])
+						n2.append(ctrl[a])
 			data = [n1, n2]
 			chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
 
 			if g in origP:
 				if isinstance(p, float) and origP[g] != 'NA' and p < origP[g]:
+					if g in permP:
+						permP[g] += 1
+					else:
+						permP[g] = 1
+	for a in origP:
+		if a in permP:
+			permP[a] = 1.0 * (permP[a] + 1) / (perm + 1)
+		else:
+			permP[a] = 'NA'
+	return permP
+def scorePerm(infile, digit, perm, seed, freq):
+	'''
+	permutation
+	input: genotype, digit to test, number of permutation to run.
+	output: dictionary, key:gene, value: p-value
+	'''
+	# original test
+	caseAlleles, ctrlAlleles, np, nc = HLAcount.allelicCount(infile,digit)
+	origP = {}
+	gene = {}  # get all genes name
+	for a in caseAlleles:
+		temp = a.split('*')
+		gene[temp[0]] = 1
+	for g in gene:
+		### counts
+		case = {}
+		ctrl = {}
+		for a in caseAlleles:
+			if a.startswith(g):
+				case[a] = caseAlleles[a]
+		for a in ctrlAlleles:
+			if a.startswith(g):
+				ctrl[a] = ctrlAlleles[a]
+		### freq
+		freqCase = {}
+		freqCtrl = {}
+		freqAll = {}
+		n1 = 0
+		n2 = 0
+		for a in case:
+			freqCase[a] = 1.0 * case[a] / np[g]
+		for a in ctrl:
+			freqCtrl[a] = 1.0 * ctrl[a] / nc[g]
+			if a in case:
+				freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[g] + nc[g])
+				n1 += case[a]
+				n2 += ctrl[a]
+		### score test U
+		u = 0
+		for a in freqAll:
+			if freqCase[a] > freq or freqCtrl[a] > freq:
+				u = u + (case[a] - n1 * freqAll[a]) ** 2 / freqAll[a] - (case[a] - n1 * freqAll[a]) / freqAll[a]
+		if not isinstance(u, float):
+			origP[g] = 'NA'
+		else:
+			origP[g] = u
+	# premutation
+	random.seed(seed)
+	permP = {}
+	pf = perm / 10
+	for i in range(perm):
+		if i % pf == 1:
+			print 'permutation {}/{} ...'.format(i, perm)
+		caseAlleles, ctrlAlleles, np, nc = HLAcountPerm.allelicCount(infile,digit)
+		for g in gene:
+			### counts
+			case = {}
+			ctrl = {}
+			for a in caseAlleles:
+				if a.startswith(g):
+					case[a] = caseAlleles[a]
+			for a in ctrlAlleles:
+				if a.startswith(g):
+					ctrl[a] = ctrlAlleles[a]
+			### freq
+			freqCase = {}
+			freqCtrl = {}
+			freqAll = {}
+			n1 = 0
+			n2 = 0
+			for a in case:
+				freqCase[a] = 1.0 * case[a] / np[g]
+			for a in ctrl:
+				freqCtrl[a] = 1.0 * ctrl[a] / nc[g]
+				if a in case:
+					freqAll[a] = 1.0 * (case[a] + ctrl[a]) / (np[g] + nc[g])
+					n1 += case[a]
+					n2 += ctrl[a]
+			### score test U
+			u = 0
+			for a in freqAll:
+				if freqCase[a] > freq or freqCtrl[a] > freq:
+					u = u + (case[a] - n1 * freqAll[a]) ** 2 / freqAll[a] - (case[a] - n1 * freqAll[a]) / freqAll[a]
+			
+			if g in origP:
+				if isinstance(u, float) and origP[g] != 'NA' and u > origP[g]:
 					if g in permP:
 						permP[g] += 1
 					else:

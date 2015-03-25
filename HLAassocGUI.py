@@ -44,6 +44,7 @@ class HLAassocWin(QtGui.QWidget):
 		self.testCombo.addItem("Fisher's exact test")
 		self.testCombo.addItem("Logistic regression")
 		self.testCombo.addItem("Raw Test")
+		self.testCombo.addItem("Score Test")
 
 		self.digitLab = QtGui.QLabel('Digits')
 		self.digitCombo = QtGui.QComboBox()
@@ -141,10 +142,11 @@ class HLAassocWin(QtGui.QWidget):
 			self.covLab.setEnabled(False)
 			self.covEdit.setEnabled(False)
 			self.testCombo.clear()
-			self.testCombo.addItem("Pearson chi-squared test",)
+			self.testCombo.addItem("Pearson chi-squared test")
 			self.testCombo.addItem("Fisher's exact test")
 			self.testCombo.addItem("Logistic regression")
 			self.testCombo.addItem("Raw Test")
+			self.testCombo.addItem("Score Test")
 			if str(self.testCombo.currentText()) == 'Logistic regression':
 				self.vLab.setEnabled(True)
 				self.vEdit.setEnabled(True)
@@ -152,6 +154,9 @@ class HLAassocWin(QtGui.QWidget):
 				self.vvButton.setEnabled(True)
 				self.covLab.setEnabled(True)
 				self.covEdit.setEnabled(True)
+			if str(self.testCombo.currentText()) == "Pearson chi-squared test" or str(self.testCombo.currentText()) == "Fisher's exact test":
+				self.modelLab.setEnabled(True)
+				self.modelCombo.setEnabled(True)
 	def testCombo_chosen(self, text):
 		if text == 'Logistic regression' or text == 'Linear regression':
 			self.modelLab.setEnabled(False)
@@ -170,7 +175,7 @@ class HLAassocWin(QtGui.QWidget):
 			self.vvButton.setEnabled(False)
 			self.covLab.setEnabled(False)
 			self.covEdit.setEnabled(False)	
-		if text == 'Raw Test':
+		if text == 'Raw Test' or text == 'Score Test':
 			self.modelLab.setEnabled(False)
 			self.modelCombo.setEnabled(False)
 	def gButtonClicked(self):
@@ -253,6 +258,8 @@ class HLAassocWin(QtGui.QWidget):
 			testM = 'linear'
 		elif testStr == 'Raw Test':
 			testM = 'raw'
+		elif testStr == 'Score Test':
+			testM = 'score'
 		comm += ' --test '
 		comm += testM
 		if testM == 'chisq' or testM == 'fisher':
@@ -263,8 +270,9 @@ class HLAassocWin(QtGui.QWidget):
 		comm += ' --freq '
 		comm += freq
 		adjust = str(self.adjCombo.currentText())
-		comm += ' --adjust '
-		comm += adjust
+		if testM != 'score' and testM != 'raw':
+			comm += ' --adjust '
+			comm += adjust
 		if testM == 'logistic' or testM == 'linear':
 			if self.covfile:
 				comm += ' --covar '
