@@ -121,7 +121,9 @@ fisher      Fisher's exact test (For disease traits, 2 x 2 coningency table)
 logistic    logistic regression (For disease traits)
 linear      linear regression (For quantitative traits)
 raw         Pearson chi-squared test (For disease traits, 2 x m coningency table) 
+score       Score test proposed by Galta (2005) et al.
 ```
+
 When linear or logistic regression was used, assume `A*01:01` is the test allele, then `A*01:01 A*01:01` is code as 2, `A*01:01 A*01:02` is code as 1, and `A*01:02 A*01:03` is code as 0.
 
 Default value is *chisq*.
@@ -213,6 +215,7 @@ P_chisq       P-value for Pearson's chi-squared test
 P_Fisher      P-value for Fisher's exact test
 P_logistic    P-value for logistic regression
 P_linear      P-value for linear regression
+U             Score test U
 OR            Odds ratio
 beta          Regression coefficient
 L95           Lower bound of 95% confidence interval for odds ratio or regression coefficient
@@ -238,6 +241,10 @@ The output includes: `Allele`, `A_case`, `B_case`, `A_ctrl`, `B_ctrl`, `F_case`,
 Raw test performs a Pearson's chi-squared test on the 2 x m contingency tables for each gene. `m` is the number of alleles have frequency in cases or controls higher the the threshold specified by option `--freq` or `-f`.    
 
 The output includes: `Gene`, `Chisq`, `DF`, `P_chisq`. When `--perm` is used, another column `P_perm` is added to the output.   
+
+### 5.3 --test score
+
+Score test calculated the score test `U` using the formula proposed by Galta et al. (2005). The output includes: `Gene`, and `U`. When `--perm` is used, another column `P_perm` is added to the output.  
 
 ## 6. Usage
 
@@ -303,7 +310,15 @@ python HLAassoc.py --file input0.txt --digits 4 --test logistic --freq 0.05 --ad
 ```
 python HLAassoc.py -i input0.txt -t raw
 python HLAassoc.py --file input0.txt --test raw
-python HLAassoc.py --file input0.txt --digits 4 --test raw --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
+python HLAassoc.py --file input0.txt --digits 4 --test raw --freq 0.05 --print False --out hlaassoc.txt
+```
+
+* Score test   
+
+```
+python HLAassoc.py -i input0.txt -t score
+python HLAassoc.py --file input0.txt --test score
+python HLAassoc.py --file input0.txt --digits 4 --test score --freq 0.05 --print False --out hlaassoc.txt
 ```
 
 ### 6.2) Quantitative trait
