@@ -1,6 +1,7 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
 ## 0. News
+* V1.6 (25 Mar 2015): add score test
 * V1.5 (19 Mar 2015): add GUI
 * v1.4 (12 Mar 2015): add raw test
 * v1.3 (10 Mar 2015): add allele frequency to output
@@ -45,7 +46,7 @@ The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/arc
 ```
 python HLAassoc.py -h
 usage: HLAassoc.py [-h] [-v] -i FILE [-d {2,4,6}] [-m {allelic,dom,rec}]
-                   [-t {chisq,fisher,logistic,linear,raw}] [-c COVAR]
+                   [-t {chisq,fisher,logistic,linear,raw,score}] [-c COVAR]
                    [-n COVARNAME] [-f FREQ] [-a {FDR,Bonferroni,Holm}]
                    [-o OUT] [-V {False,True}] [-p PERM] [-s SEED]
 
@@ -59,7 +60,7 @@ optional arguments:
                         digits to test, default 4
   -m {allelic,dom,rec}, --model {allelic,dom,rec}
                         genetic model, default allelic
-  -t {chisq,fisher,logistic,linear,raw}, --test {chisq,fisher,logistic,linear,raw}
+  -t {chisq,fisher,logistic,linear,raw,score}, --test {chisq,fisher,logistic,linear,raw,score}
                         statistical test method, default chisq
   -c COVAR, --covar COVAR
                         covariants file
@@ -72,6 +73,7 @@ optional arguments:
   -V {False,True}, --print {False,True}
                         print output to screen
   -p PERM, --perm PERM  number of permutation
+  -s SEED, --seed SEED  random seed
 ```
 
 ### 4.1) Genotype Input (-i or --file)  
