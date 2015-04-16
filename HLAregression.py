@@ -25,7 +25,8 @@ def regressionLogistic(infile, digits, freq, method):
 		f1 = 1.0 * n1 / n2
 		f2 = 1.0 * n3 / n4
 		f12 = 1.0 * (n1 + n3) / (n2 + n4)
-		if f1 > freq or f2 > freq:
+		# if f1 > freq or f2 > freq:
+		if f12 > freq:
 			n2 -= n1
 			n4 -= n3
 			myformula = 'PHT ~ ' + allele
@@ -158,7 +159,8 @@ def logisticCov(infile, digits, freq, method, covfile, covname):
 		f1 = 1.0 * n1 / n2
 		f2 = 1.0 * n3 / n4
 		f12 = 1.0 * (n1 + n3) / (n2 + n4)
-		if f1 > freq or f2 > freq:
+		# if f1 > freq or f2 > freq:
+		if f12 > freq:
 			n2 -= n1
 			n4 -= n3
 			geno9 = geno.ix[:, ['IID', 'PHT', allele]]

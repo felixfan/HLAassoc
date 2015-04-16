@@ -47,7 +47,7 @@ if 'perm' in args:
 
 #####################################################################
 print "@-------------------------------------------------------------@"
-print "|       HLAassoc       |     v 1.6     |     25 Mar 2015      |"
+print "|       HLAassoc       |     v 1.7     |     15 Apr 2015      |"
 print "|-------------------------------------------------------------|"
 print "|  (C) 2015 Felix Yanhui Fan, GNU General Public License, v2  |"
 print "|-------------------------------------------------------------|"
@@ -79,16 +79,16 @@ print
 ### permutation
 if PERM:
 	if TEST == 'chisq' or TEST == 'fisher':
-		permp = HLAperm.chisqFisherPerm(INFILE, DIGIT, MODEL, TEST, PERM, SEED)
+		permp, permn, permna, permnl = HLAperm.chisqFisherPerm(INFILE, DIGIT, MODEL, TEST, PERM, SEED, FREQ)
 	elif TEST == 'raw':
-		permp = HLAperm.rawPerm(INFILE, DIGIT, PERM, SEED, FREQ)
+		permp, permn, permna, permnl = HLAperm.rawPerm(INFILE, DIGIT, PERM, SEED, FREQ)
 	elif TEST == 'score':
-		permp = HLAperm.scorePerm(INFILE, DIGIT, PERM, SEED, FREQ)
+		permp, permn, permna, permnl = HLAperm.scorePerm(INFILE, DIGIT, PERM, SEED, FREQ)
 	elif TEST == 'logistic' or TEST == 'linear':
 		if COVFILE:
-			permp = HLAperm.regressionCovPerm(INFILE, DIGIT, TEST, PERM, COVFILE, COVNAME, SEED)
+			permp, permn, permna, permnl = HLAperm.regressionCovPerm(INFILE, DIGIT, TEST, PERM, COVFILE, COVNAME, SEED,FREQ)
 		else:
-			permp = HLAperm.regressionPerm(INFILE, DIGIT, TEST, PERM,SEED)
+			permp, permn, permna, permnl = HLAperm.regressionPerm(INFILE, DIGIT, TEST, PERM,SEED, FREQ)
 ### output header
 f = open(OUTFILE,"w")
 if TEST == 'chisq':
@@ -112,7 +112,22 @@ for h in header:
 if PRINT:		
 	print
 f.write('\n')
-
+############################################################
+### write perm output
+if PERM:
+	fp = open(OUTFILE + '.perm', 'w')
+	fp.write("%12s%12s%12s%12s%12s%12s\n" % ('ID', 'L', 'S', 'NA', 'Perm', 'Perm_P'))
+	for a in sorted(permp.keys()):
+		fp.write("%12s" % a,)
+		fp.write("%12s" % permn[a],)
+		fp.write("%12s" % permnl[a],)
+		fp.write("%12s" % permna[a],)
+		fp.write("%12s" % PERM,)
+		if permp[a] != 'NA':
+			fp.write("%12s\n" % str(round(permp[a],6)))
+		else:
+			fp.write("%12s\n" % 'NA')
+	fp.close()
 ############################################################
 ### run association analysis
 rs = []

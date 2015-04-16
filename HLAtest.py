@@ -34,7 +34,8 @@ def assocADRChiFisher(caseAlleles, ctrlAlleles, np, nc, allele, freq, test):
 	### assoc
 	for a in case:
 		if a in ctrl:
-			if freqCase[a] > freq or freqCtrl[a] > freq:
+			# if freqCase[a] > freq or freqCtrl[a] > freq:
+			if freqAll[a] > freq:
 				n1 = case[a]
 				n2 = np[allele] - case[a]
 				n3 = ctrl[a]
@@ -79,7 +80,6 @@ def runAssoc(infile, digit, freq, model, test):
 	elif model == 'rec':
 		caseAlleles, ctrlAlleles, np, nc = HLAcount.recCount(infile,digit)
 	
-
 	result = []
 	gs = geno.keys()
 	gs = sorted(gs)
@@ -126,7 +126,8 @@ def assocRaw(caseAlleles, ctrlAlleles, np, nc, freq, test):
 		n2 = []
 		for a in case:
 			if a in ctrl:
-				if freqCase[a] > freq or freqCtrl[a] > freq:
+				# if freqCase[a] > freq or freqCtrl[a] > freq:
+				if freqAll[a] > freq:
 					n1.append(case[a])
 					n2.append(ctrl[a])
 		data = [n1, n2]
@@ -184,7 +185,8 @@ def assocScoreU(caseAlleles, ctrlAlleles, np, nc, freq, test):
 		n1 = np[g]
 		u = 0
 		for a in freqAll:
-			if freqCase[a] > freq or freqCtrl[a] > freq:
+			# if freqCase[a] > freq or freqCtrl[a] > freq:
+			if freqAll[a] > freq:
 				u = u + (case[a] - n1 * freqAll[a]) ** 2 / freqAll[a] - (case[a] - n1 * freqAll[a]) / freqAll[a]
 		if not isinstance(u, float):
 			s1 = 'NA'
