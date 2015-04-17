@@ -25,7 +25,6 @@ def regressionLogistic(infile, digits, freq, method):
 		f1 = 1.0 * n1 / n2
 		f2 = 1.0 * n3 / n4
 		f12 = 1.0 * (n1 + n3) / (n2 + n4)
-		# if f1 > freq or f2 > freq:
 		if f12 > freq:
 			n2 -= n1
 			n4 -= n3
@@ -57,28 +56,32 @@ def regressionLogistic(infile, digits, freq, method):
 				nname = nname + ':' + aname[2]
 			elif digits == 6:
 				nname = nname + ':' + aname[2] + ':' + aname[3]
-			s1 = nname + '\t' + str(n1) + '\t' + str(n2) + '\t' + str(n3) + '\t' + str(n4)
-			s2 = '\t' + str(round(f1,4)) + '\t' + str(round(f2,4)) + '\t' + str(round(f12,4))
-
+			ss = []
+			ss.append(nname)
+			ss.append(n1)
+			ss.append(n2)
+			ss.append(n3)
+			ss.append(n4)
+			ss.append(f1)
+			ss.append(f2)
+			ss.append(f12)
 			if p != 'NA':
-				s3 = '\t' + str(round(p,6))
+				ss.append(p)
 			else:
-				s3 = '\t' + 'NA'
-
-			if method == "logistic":	
-				if OR != 'NA':
-					s3 = s3 + '\t' + str(round(OR,4))
-				else:
-					s3 = s3 + '\t' + 'NA'
+				ss.append('NA')	
+			if OR != 'NA':
+				ss.append(OR)
+			else:
+				ss.append('NA')
 			if L95 != 'NA':
-				s4 = '\t' + str(round(L95,4))
+				ss.append(L95)
 			else:
-				s4 = '\t' + 'NA'
+				ss.append('NA')
 			if U95 != 'NA':
-				s4 = s4 + '\t' + str(round(U95,4))
+				ss.append(U95)
 			else:
-				s4 = s4 + '\t' + 'NA'
-			assoc[nname] = s1 + s2 + s3 + s4
+				ss.append('NA')
+			assoc[nname] = ss
 	return assoc
 def regressionLinear(infile, digits, freq, method):
 	'''
@@ -114,26 +117,26 @@ def regressionLinear(infile, digits, freq, method):
 				nname = nname + ':' + aname[2]
 			elif digits == 6:
 					nname = nname + ':' + aname[2] + ':' + aname[3]
-			s1 = nname + '\t' + str(round(f12,4))
+			ss = []
+			ss.append(nname)
+			ss.append(f12)
 			if p != 'NA':
-				s3 = '\t' + str(round(p,6))
+				ss.append(p)
 			else:
-				s3 = '\t' + 'NA'
-
-			if method == "linear":
-				if beta != 'NA':
-					s3 = s3 + '\t' + str(round(beta,4))
-				else:
-					s3 = s3 + '\t' + 'NA'
+				ss.append('NA')
+			if beta != 'NA':
+				ss.append(beta)
+			else:
+				ss.append('NA')
 			if L95 != 'NA':
-				s4 = '\t' + str(round(L95,4))
+				ss.append(L95)
 			else:
-				s4 = '\t' + 'NA'
+				ss.append('NA')
 			if U95 != 'NA':
-				s4 = s4 + '\t' + str(round(U95,4))
+				ss.append(U95)
 			else:
-				s4 = s4 + '\t' + 'NA'
-			assoc[nname] = s1 + s3 + s4
+				ss.append('NA')
+			assoc[nname] = ss
 	return assoc
 def logisticCov(infile, digits, freq, method, covfile, covname):
 	'''
@@ -199,27 +202,32 @@ def logisticCov(infile, digits, freq, method, covfile, covname):
 				nname = nname + ':' + aname[2]
 			elif digits == 6:
 				nname = nname + ':' + aname[2] + ':' + aname[3]
-			s1 = nname + '\t' + str(n1) + '\t' + str(n2) + '\t' + str(n3) + '\t' + str(n4)
-			s2 = '\t' + str(round(f1,4)) + '\t' + str(round(f2,4)) + '\t' + str(round(f12,4))
+			ss = []
+			ss.append(nname)
+			ss.append(n1)
+			ss.append(n2)
+			ss.append(n3)
+			ss.append(n4)
+			ss.append(f1)
+			ss.append(f2)
+			ss.append(f12)
 			if p != 'NA':
-				s3 = '\t' + str(round(p,6))
+				ss.append(p)
 			else:
-				s3 = '\t' + 'NA'
-
-			if method == "logistic":	
-				if OR != 'NA':
-					s3 = s3 + '\t' + str(round(OR,4))
-				else:
-					s3 = s3 + '\t' + 'NA'
+				ss.append('NA')	
+			if OR != 'NA':
+				ss.append(OR)
+			else:
+				ss.append('NA')
 			if L95 != 'NA':
-				s4 = '\t' + str(round(L95,4))
+				ss.append(L95)
 			else:
-				s4 = '\t' + 'NA'
+				ss.append('NA')
 			if U95 != 'NA':
-				s4 = s4 + '\t' + str(round(U95,4))
+				ss.append(U95)
 			else:
-				s4 = s4 + '\t' + 'NA'
-			assoc[nname] = s1 + s2 + s3 + s4
+				ss.append('NA')
+			assoc[nname] = ss
 	return assoc
 def linearCov(infile, digits, freq, method, covfile, covname):
 	'''
@@ -269,24 +277,24 @@ def linearCov(infile, digits, freq, method, covfile, covname):
 				nname = nname + ':' + aname[2]
 			elif digits == 6:
 				nname = nname + ':' + aname[2] + ':' + aname[3]
-			s1 = nname + '\t' + str(round(f12,4))
+			ss = []
+			ss.append(nname)
+			ss.append(f12)
 			if p != 'NA':
-				s3 = '\t' + str(round(p,6))
+				ss.append(p)
 			else:
-				s3 = '\t' + 'NA'
-
-			if method == "linear":
-				if beta != 'NA':
-					s3 = s3 + '\t' + str(round(beta,4))
-				else:
-					s3 = s3 + '\t' + 'NA'
+				ss.append('NA')
+			if beta != 'NA':
+				ss.append(beta)
+			else:
+				ss.append('NA')
 			if L95 != 'NA':
-				s4 = '\t' + str(round(L95,4))
+				ss.append(L95)
 			else:
-				s4 = '\t' + 'NA'
+				ss.append('NA')
 			if U95 != 'NA':
-				s4 = s4 + '\t' + str(round(U95,4))
+				ss.append(U95)
 			else:
-				s4 = s4 + '\t' + 'NA'
-			assoc[nname] = s1 + s3 + s4
+				ss.append('NA')
+			assoc[nname] = ss
 	return assoc

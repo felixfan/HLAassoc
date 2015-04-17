@@ -96,7 +96,7 @@ if TEST == 'chisq':
 elif TEST == 'fisher':
 	header = ["Allele","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_Fisher","OR","L95","U95","P_adj"]
 elif TEST == 'logistic':
-	header = ["Allele","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_logistic","OR","L95","U95","P_adj"]
+	header = ["Allele","A_case","B_case","A_ctrl","B_ctrl","F_case","F_ctrl","Freq","P_logit","OR","L95","U95","P_adj"]
 elif TEST == 'linear':
 	header = ["Allele","Freq","P_linear","beta","L95","U95","P_adj"]
 elif TEST == 'raw':
@@ -106,9 +106,14 @@ elif TEST == 'score':
 if PERM:
 	header.append('P_perm')
 for h in header:
-	if PRINT:
-		print "%12s" % h,
-	f.write("%12s" % h,)
+	if h == 'Allele' or h == 'Gene':
+		if PRINT:
+			print "%12s" % h,
+		f.write("%12s" % h,)
+	else:
+		if PRINT:
+			print "%8s" % h,
+		f.write("%8s" % h,)
 if PRINT:		
 	print
 f.write('\n')
@@ -170,7 +175,7 @@ if TEST == 'chisq':
 	pp = 10
 elif TEST == 'linear':
 	pp = 2
-else:
+else:                   # logistic and fisher
 	pp = 8
 if TEST != 'raw' and TEST != 'score':
 	for r in rs:                        ### GENE BY GENE
@@ -179,44 +184,85 @@ if TEST != 'raw' and TEST != 'score':
 		ps = []
 		### get p values for a group
 		for key in keys:
-			words = r[key].split()
+			words = r[key]
 			if words[pp] != 'NA':
-				ps.append(float(words[pp]))
+				ps.append(words[pp])
 		### adjust p
 		cp = pAdjust.adjustP(ps,ADJUST)
 		### output
 		for key in keys:
-				words = r[key].split()
+				words = r[key]
 				for word in words: # test results
-					if PRINT:
-						print "%12s" % word,
-					f.write("%12s" % word,)
+					if word == words[0]:
+						if PRINT:
+							print "%12s" % word,
+						f.write("%12s" % word,)
+					elif word == words[pp]:
+						if PRINT:
+							if word == 'NA':
+								print "%8s" % word,
+							elif word > 0.001:
+								print "%8.4f" % word,
+							else:
+								print "%8.2e" % word,
+						if word == 'NA':
+							f.write("%8s" % word,)
+						elif word > 0.001:
+							f.write("%8.4f" % word,)
+						else:
+							f.write("%8.2e" % word,)
+					else:
+						if PRINT:
+							if isinstance(word, int):
+								print "%8d" % word,
+							elif isinstance(word, float):
+								print "%8.4f" % word,
+							elif isinstance(word, str):
+								print "%8s" % word,
+						if isinstance(word, int):
+							f.write("%8d" % word,)
+						elif isinstance(word, float):
+							f.write("%8.4f" % word,)
+						elif isinstance(word, str):
+							f.write("%8s" % word,)
 				### adjust
 				if words[pp] != 'NA':
 					tmp = cp.pop(0)
 					if PRINT:
-						print "%12s" % str(round(tmp,6)),
-					f.write('%12s' % str(round(tmp,6)))
+						if tmp > 0.001:
+							print "%8.4f" % tmp,
+						else:
+							print "%8.2e" % tmp,
+					if tmp > 0.001:
+						f.write('%8.4f' % tmp,)
+					else:
+						f.write('%8.2e' % tmp,)
 				else:
 					if PRINT:
-						print "%12s" % ('NA'),
-					f.write('%12s' % ('NA'))
+						print "%8s" % 'NA',
+					f.write('%8s' % 'NA',)
 				### perm
 				if PERM:
 					if key in permp:
 						if PRINT:
 							if permp[key] != 'NA':
-								print "%12s" % str(round(permp[key],6)),
+								if  permp[key] > 0.001:
+									print "%8.4f" % permp[key],
+								else:
+									print "%8.2e" % permp[key],
 							else:
-								print "%12s" % 'NA',
+								print "%8s" % 'NA',
 						if permp[key] != 'NA':
-							f.write('%12s' % str(round(permp[key],6)))
+							if  permp[key] > 0.001:
+								f.write('%8.4f' % permp[key],)
+							else:
+								f.write('%8.2e' % permp[key],)
 						else:
-							f.write('%12s' % 'NA')
+							f.write('%8s' % 'NA',)
 					else:
 						if PRINT:
-							print "%12s" % 'NA',
-						f.write('%12s' % 'NA')
+							print "%8s" % 'NA',
+						f.write('%8s' % 'NA',)
 				# new line
 				if PRINT:
 					print
@@ -229,59 +275,99 @@ elif TEST == 'raw': # raw test
 			print "%12s" % k,
 		f.write('%12s' % k)
 
-		fs = rs2[k].split()
+		fs = rs2[k]
 		for ff in fs:
 			if PRINT:
-				print "%12s" % ff,
-			f.write('%12s' % ff)
+				if ff == fs[2]:           # p-value column
+					if ff == 'NA':
+						print "%8s" % ff,
+					elif ff > 0.001:
+						print "%8.4f" % ff,
+					else:
+						print "%8.2e" % ff,
+				else:
+					if isinstance(ff, int):
+						print "%8d" % ff,
+					elif isinstance(ff, float):
+						print "%8.4f" % ff,
+					elif isinstance(ff, str):
+						print "%8s" % word,
+			if ff == fs[2]:           # p-value column
+				if ff == 'NA':
+					f.write("%8s" % ff,)
+				elif ff > 0.001:
+					f.write("%8.4f" % ff,)
+				else:
+					f.write("%8.2e" % ff,)
+			else:
+				if isinstance(ff, int):
+					f.write("%8d" % ff,)
+				elif isinstance(ff, float):
+					f.write("%8.4f" % ff,)
+				elif isinstance(ff, str):
+					f.write("%8s" % word,)
 		### perm
 		if PERM:
-			if k in permp:
+			if key in permp:
 				if PRINT:
-					if permp[k] != 'NA':
-						print "%12s" % str(round(permp[k],6)),
+					if permp[key] != 'NA':
+						if  permp[key] > 0.001:
+							print "%8.4f" % permp[key],
+						else:
+							print "%8.2e" % permp[key],
 					else:
-						print "%12s" % 'NA',
-				if permp[k] != 'NA':
-					f.write('%12s' % str(round(permp[k],6)))
+						print "%8s" % 'NA',
+				if permp[key] != 'NA':
+					if  permp[key] > 0.001:
+						f.write('%8.4f' % permp[key],)
+					else:
+						f.write('%8.2e' % permp[key],)
 				else:
-					f.write('%12s' % 'NA')
+					f.write('%8s' % 'NA',)
 			else:
 				if PRINT:
-					print "%12s" % 'NA',
-				f.write('%12s' % 'NA')
-
+					print "%8s" % 'NA',
+				f.write('%8s' % 'NA',)
+		# new line
 		if PRINT:
 			print
 		f.write('\n')
+	f.close()
 else: # score test U
 	keys = sorted(rs2.keys())
 	for k in keys:
 		if PRINT:
 			print "%12s" % k,
-			print "%12s" % rs2[k],
-		f.write('%12s' % k)
-		f.write('%12s' % rs2[k])
+			print "%8.4f" % rs2[k],
+		f.write('%12s' % k,)
+		f.write('%8.4f' % rs2[k],)
 		### perm
 		if PERM:
-			if k in permp:
+			if key in permp:
 				if PRINT:
-					if permp[k] != 'NA':
-						print "%12s" % str(round(permp[k],6)),
+					if permp[key] != 'NA':
+						if  permp[key] > 0.001:
+							print "%8.4f" % permp[key],
+						else:
+							print "%8.2e" % permp[key],
 					else:
-						print "%12s" % 'NA',
-				if permp[k] != 'NA':
-					f.write('%12s' % str(round(permp[k],6)))
+						print "%8s" % 'NA',
+				if permp[key] != 'NA':
+					if  permp[key] > 0.001:
+						f.write('%8.4f' % permp[key],)
+					else:
+						f.write('%8.2e' % permp[key],)
 				else:
-					f.write('%12s' % 'NA')
+					f.write('%8s' % 'NA',)
 			else:
 				if PRINT:
-					print "%12s" % 'NA',
-				f.write('%12s' % 'NA')
-
+					print "%8s" % 'NA',
+				f.write('%8s' % 'NA',)
+		# new line
 		if PRINT:
 			print
 		f.write('\n')
+	f.close()
 ##############################################################
 import time
 print "Finished at ",

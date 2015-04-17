@@ -41,25 +41,31 @@ def assocADRChiFisher(caseAlleles, ctrlAlleles, np, nc, allele, freq, test):
 				n3 = ctrl[a]
 				n4 = nc[allele] - ctrl[a]
 				data = [[n1, n2], [n3, n4]]
-
 				if test == "chisq":
 					chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
-
 				OR, pvalue = scipy.stats.fisher_exact(data)
-
 				se = math.sqrt(1.0/n1  + 1.0/n2 +  1.0/n3 + 1.0/n4)
 				l95 = math.exp(math.log(OR) - 1.96 * se)
 				u95 = math.exp(math.log(OR) + 1.96 * se)
-
-				s1 = a + '\t' + str(n1) + '\t' + str(n2) + '\t' + str(n3) + '\t' + str(n4)
-				s2 = '\t' + str(round(freqCase[a],4)) + '\t' + str(round(freqCtrl[a],4))
-				s2 = s2 + '\t' + str(round(freqAll[a],4))
+				ss = []
+				ss.append(a)
+				ss.append(n1)
+				ss.append(n2)
+				ss.append(n3)
+				ss.append(n4)
+				ss.append(freqCase[a])
+				ss.append(freqCtrl[a])
+				ss.append(freqAll[a])
 				if test == "chisq":
-					s3 = '\t' + str(round(chi2,4)) + '\t' + str(dof) + '\t' + str(round(p,6))
+					ss.append(chi2)
+					ss.append(dof)
+					ss.append(p)
 				elif test == "fisher":
-					s3 = '\t' + str(round(pvalue,6))
-				s4 = '\t' + str(round(OR,4)) + '\t' + str(round(l95,4)) + '\t' + str(round(u95,4))
-				assoc[a] = s1 + s2 + s3 + s4
+					ss.append(pvalue)
+				ss.append(OR)
+				ss.append(l95)
+				ss.append(u95)
+				assoc[a] = ss
 	return assoc
 
 def runAssoc(infile, digit, freq, model, test):
@@ -133,19 +139,20 @@ def assocRaw(caseAlleles, ctrlAlleles, np, nc, freq, test):
 		data = [n1, n2]
 		if test == "raw":
 			chi2, p, dof, expected = scipy.stats.chi2_contingency(data)
+		ss = []
 		if not isinstance(chi2, float):
-			s1 = 'NA'
+			ss.append('NA')
 		else:
-			s1 = str(round(chi2,4))
+			ss.append(chi2)
 		if not isinstance(dof, int):
-			s2 = '\t' + 'NA'
+			ss.append('NA')
 		else:
-			s2 = '\t' + str(dof)
+			ss.append(dof)
 		if not isinstance(p, float):
-			s3 = '\t' + 'NA'
+			ss.append('NA')
 		else:
-			s3 = '\t' + str(round(p,6))
-		assoc[g] = s1 + s2 + s3
+			ss.append(p)
+		assoc[g] = ss
 	return assoc
 def assocScoreU(caseAlleles, ctrlAlleles, np, nc, freq, test):
 	'''
@@ -189,8 +196,6 @@ def assocScoreU(caseAlleles, ctrlAlleles, np, nc, freq, test):
 			if freqAll[a] > freq:
 				u = u + (case[a] - n1 * freqAll[a]) ** 2 / freqAll[a] - (case[a] - n1 * freqAll[a]) / freqAll[a]
 		if not isinstance(u, float):
-			s1 = 'NA'
-		else:
-			s1 = str(round(u,4))
-		assoc[g] = s1
+			u = 'NA'
+		assoc[g] = u
 	return assoc
