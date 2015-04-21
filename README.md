@@ -178,6 +178,7 @@ A value between 0 and 1. Only alleles/allele groups have frequency higher than t
 Bonferroni         Bonferroni single-step adjusted p-values
 Holm               Holm (1979) step-down adjusted p-values
 FDR                Benjamini & Hochberg (1995) step-up FDR control
+FDR_BY             Benjamini & Yekutieli (2001) step-up FDR control
 ```
 
 ### 4.9) Permutation (-p or --perm)
