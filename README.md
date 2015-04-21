@@ -1,7 +1,7 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
 ## 0. News
-* V1.7 (15 Apr): optimize code and add FDR_BY
+* V1.7 (15 Apr 2015): optimize code and add FDR_BY
 * V1.6 (25 Mar 2015): add score test
 * V1.5 (19 Mar 2015): add GUI
 * v1.4 (12 Mar 2015): add raw test
@@ -50,7 +50,7 @@ The latest HLAassoc is available [here](https://github.com/felixfan/HLAassoc/arc
 python HLAassoc.py -h
 usage: HLAassoc.py [-h] [-v] -i FILE [-d {2,4,6}] [-m {allelic,dom,rec}]
                    [-t {chisq,fisher,logistic,linear,raw,score}] [-c COVAR]
-                   [-n COVARNAME] [-f FREQ] [-a {FDR,Bonferroni,Holm}]
+                   [-n COVARNAME] [-f FREQ] [-a {FDR,FDR_BY,Bonferroni,Holm}]
                    [-o OUT] [-V {False,True}] [-p PERM] [-s SEED]
 
 HLA Association Analysis
@@ -70,7 +70,7 @@ optional arguments:
   -n COVARNAME, --covarname COVARNAME
                         select a particular subset of covariates
   -f FREQ, --freq FREQ  minimal frequency, default 0.05
-  -a {FDR,Bonferroni,Holm}, --adjust {FDR,Bonferroni,Holm}
+  -a {FDR,FDR_BY,Bonferroni,Holm}, --adjust {FDR,FDR_BY,Bonferroni,Holm}
                         p value correction, default FDR
   -o OUT, --out OUT     output file
   -V {False,True}, --print {False,True}
