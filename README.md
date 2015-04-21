@@ -1,6 +1,7 @@
 # HLAassoc: Tests for association between disease and HLA alleles.
 
 ## 0. News
+* V1.7 (15 Apr): optimize code and add FDR_BY
 * V1.6 (25 Mar 2015): add score test
 * V1.5 (19 Mar 2015): add GUI
 * v1.4 (12 Mar 2015): add raw test
