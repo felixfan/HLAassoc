@@ -13,7 +13,7 @@ class HLAassocWin(QtGui.QWidget):
 		self.height =500
 		self.setFixedSize(self.width, self.height)
 		self.move(200, 200)
-		self.setWindowTitle('HLAassoc')
+		self.setWindowTitle('HLAassoc v1.7.2')
 		#######################################################
 		self.gfile = ''
 		self.covfile = ''
@@ -56,7 +56,7 @@ class HLAassocWin(QtGui.QWidget):
 
 		self.adjLab = QtGui.QLabel('adjustment')
 		self.adjCombo = QtGui.QComboBox()
-		self.adjCombo.addItems(["FDR", "Bonferroni", "Holm"])
+		self.adjCombo.addItems(["FDR", "FDR_BY","Bonferroni", "Holm"])
 
 		self.frqLab = QtGui.QLabel('allele frequency')
 		self.frqEdit = QtGui.QLineEdit()

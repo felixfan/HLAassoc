@@ -8,7 +8,7 @@ import HLAperm
 import HLAcount
 
 parser = argparse.ArgumentParser(description='HLA Association Analysis', prog="HLAassoc.py")
-parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.6')
+parser.add_argument('-v', '--version', action='version', version='%(prog)s 1.7.2')
 parser.add_argument('-i', '--file', help='input file', required=True, type=str)
 parser.add_argument('-d', '--digits', help='digits to test, default 4', default=4, type=int, choices=[2,4,6])
 parser.add_argument('-m', '--model', help='genetic model, default allelic', default='allelic', type=str, choices=['allelic','dom','rec'])
@@ -16,7 +16,7 @@ parser.add_argument('-t', '--test', help='statistical test method, default chisq
 parser.add_argument('-c', '--covar', help='covariants file', type=str)
 parser.add_argument('-n', '--covarname', help='select a particular subset of covariates', type=str)
 parser.add_argument('-f', '--freq', help='minimal frequency, default 0.05', default=0.05, type=float)
-parser.add_argument('-a', '--adjust', help='p value correction, default FDR', default='FDR', type=str,choices=['FDR','Bonferroni','Holm'])
+parser.add_argument('-a', '--adjust', help='p value correction, default FDR', default='FDR', type=str,choices=['FDR','FDR_BY','Bonferroni','Holm'])
 parser.add_argument('-o', '--out', help='output file', default='hlaassoc.txt')
 parser.add_argument('-V', '--print', help='print output to screen', type=str, default='False', choices=['False', 'True'])
 parser.add_argument('-p', '--perm', help='number of permutation', type=int)
@@ -47,7 +47,7 @@ if 'perm' in args:
 
 #####################################################################
 print "@-------------------------------------------------------------@"
-print "|       HLAassoc       |     v 1.7     |     15 Apr 2015      |"
+print "|       HLAassoc       |     v1.7.2    |     15 Apr 2015      |"
 print "|-------------------------------------------------------------|"
 print "|  (C) 2015 Felix Yanhui Fan, GNU General Public License, v2  |"
 print "|-------------------------------------------------------------|"
