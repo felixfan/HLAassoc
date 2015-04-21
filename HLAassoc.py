@@ -270,12 +270,12 @@ if TEST != 'raw' and TEST != 'score':
 	f.close()
 elif TEST == 'raw': # raw test
 	keys = sorted(rs2.keys())
-	for k in keys:
+	for key in keys:
 		if PRINT:
-			print "%12s" % k,
-		f.write('%12s' % k)
+			print "%12s" % key,
+		f.write('%12s' % key)
 
-		fs = rs2[k]
+		fs = rs2[key]
 		for ff in fs:
 			if PRINT:
 				if ff == fs[2]:           # p-value column
@@ -335,12 +335,12 @@ elif TEST == 'raw': # raw test
 	f.close()
 else: # score test U
 	keys = sorted(rs2.keys())
-	for k in keys:
+	for key in keys:
 		if PRINT:
-			print "%12s" % k,
-			print "%8.4f" % rs2[k],
-		f.write('%12s' % k,)
-		f.write('%8.4f' % rs2[k],)
+			print "%12s" % key,
+			print "%8.4f" % rs2[key],
+		f.write('%12s' % key,)
+		f.write('%8.4f' % rs2[key],)
 		### perm
 		if PERM:
 			if key in permp:
