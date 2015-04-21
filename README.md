@@ -270,16 +270,10 @@ python HLAassoc.py -i input0.txt
 python HLAassoc.py --file input0.txt --digits 4 --test chisq --model allelic --freq 0.05 --adjust FDR --print False --out hlaassoc.txt
 ```
 
-1000 permutation test:   
+Test all alleles with frequency higher than 0.001 and perform 10000 permutation test (it takes about 1 hour):  
 
 ```
-python HLAassoc.py --file input0.txt --perm 1000
-```
-
-Test all alleles and perform 10000 permutation test (it takes about 7 minutes):   
-
-```
-python HLAassoc.py --file input0.txt --perm 10000 --freq 0
+python HLAassoc.py --file input0.txt --perm 10000 --freq 0.001
 ```
 
 **Note:** Order of options do **NOT** matter.    
