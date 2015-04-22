@@ -276,7 +276,26 @@ Test all alleles with frequency higher than 0.001 and perform 10000 permutation 
 python HLAassoc.py --file input0.txt --perm 10000 --freq 0.001
 ```
 
-**Note:** Order of options do **NOT** matter.    
+Time used to perform 10000 permuatation using the example data.   
+
+| Test    | Frequency | digit | perm | Wall time   |
+|---------|-----------|-------|------|-------------|
+|chisq    |0.05       |4      |10000 |4min 45s     |
+|fisher   |0.05       |4      |10000 |1h 5min 32s  |
+|raw      |0.05       |4      |10000 |4min 19s     |
+|score    |0.05       |4      |10000 |4min 28s     |
+|logistic |0.05       |4      |10000 |23min 59s    |
+|linear   |0.05       |4      |10000 |17min 21s    |
+|chisq    |0.001      |4      |10000 |53min 35s    |
+|fisher   |0.001      |4      |10000 |2h 49min 2s  |
+|raw      |0.001      |4      |10000 |51min 4s     |
+|score    |0.001      |4      |10000 |51min 16s    |
+|logistic |0.001      |4      |10000 |2h 14min 20s |
+|linear   |0.05       |4      |10000 |1h 33min 1s  |
+
+**Note:** Only simulated data with the same common alleles as the original data was used. The number of simulation usually is larger than the number `perm`, especially when lower frequency alleles were included. If there are only several alleles in cases and controls in the original data, these alleles may only occur in cases or controls in a simulated data.
+
+**Note:** Order of options do **NOT** matter.
 
 * Fisher's exact test     
 
