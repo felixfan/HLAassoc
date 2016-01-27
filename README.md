@@ -1,3 +1,5 @@
+## This project has been deprecated, please use [PyHLA](https://github.com/felixfan/PyHLA) instead!
+
 # HLAassoc: Tests for association between disease and HLA alleles.
 
 ![](./fig/HLAassoc1.png)
