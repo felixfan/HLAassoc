@@ -1,3 +1,7 @@
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)
+[![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
+[![deprecated](http://badges.github.io/stability-badges/dist/deprecated.svg)](http://github.com/badges/stability-badges)
+
 ## This project has been deprecated, please use [PyHLA](https://github.com/felixfan/PyHLA) instead!
 
 # HLAassoc: Tests for association between disease and HLA alleles.
